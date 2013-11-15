@@ -3,8 +3,7 @@ from django.conf.urls import patterns, include, url
 from django.contrib import admin
 admin.autodiscover()
 
-from emailer.views import IndexView
-
+import emailer.urls
 
 urlpatterns = patterns('',
     # Examples:
@@ -12,5 +11,5 @@ urlpatterns = patterns('',
     # url(r'^blog/', include('blog.urls')),
 
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^$', IndexView.as_view(), name='index'),
+    url(r'^', include(emailer.urls, namespace='bulkymonkey')),
 )

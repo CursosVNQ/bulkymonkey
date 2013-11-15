@@ -4,7 +4,7 @@
 <html lang="{{ LANGUAGE_CODE }}">
 <head>
   <meta charset="utf-8">
-  <title>Bulky Monkey dashboard</title>
+  <title>Bulky Monkey - {% block extra_title %}{% endblock %}</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="">
   <meta name="author" content="Diego Navarro Mellen">
@@ -32,6 +32,11 @@
 	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
 	<script type="text/javascript" src="{{ STATIC_URL }}js/scripts.js"></script>
+
+  <!-- NVD3.js Charts -->
+  <script type="text/javascript" src="{{ STATIC_URL }}js/d3.v2.min.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}js/nv.d3.min.js"></script>
+  <link href="{{ STATIC_URL }}css/nv.d3.min.css" rel="stylesheet">
 </head>
 
 <body>
@@ -45,8 +50,11 @@
 				
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 					<ul class="nav navbar-nav">
-						<li class="active">
-							<a href="#"><span class="glyphicon glyphicon-stats"></span> {% trans "Dashboard" %}</a>
+						<li {% if button_dashboard_on %}class="active"{% endif %}>
+							<a href="{% url 'bulkymonkey:index' %}"><span class="glyphicon glyphicon-stats"></span> {% trans "Dashboard" %}</a>
+						</li>
+						<li {% if button_campaigns_on %}class="active"{% endif %}>
+							<a href="{% url 'bulkymonkey:campaign-list' %}"><span class="glyphicon glyphicon-bullhorn"></span> {% trans "Campaigns" %}</a>
 						</li>
 						<li>
 							<a href="#"><span class="glyphicon glyphicon-inbox"></span> {% trans "Send emails" %}</a>
@@ -55,7 +63,7 @@
 							 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> {% trans "More actions" %}<strong class="caret"></strong></a>
 							<ul class="dropdown-menu">
 								<li>
-									<a href="#">{% trans "Load emails from file" %}</a>
+									<a href="#"><span class="glyphicon glyphicon-open"></span> {% trans "Load emails from file" %}</a>
 								</li>
 							</ul>
 						</li>
@@ -84,7 +92,7 @@
 				</div>
 				
 			</nav>
-			<br><br>
+			<br><br><br>
 			<div class="row clearfix">
 				<div class="col-md-12 column">
 				{% block content %}{% endblock %}
@@ -92,14 +100,23 @@
 			</div>
 		</div>
 	</div>
-	<div class="row clearfix">
-		<div class="col-md-4 column">
-		</div>
-		<div class="col-md-4 column">
-		</div>
-		<div class="col-md-4 column">
-		</div>
+</div>
+<div class="navbar navbar-default navbar-fixed-bottom">
+	<div class="container">
+		<p class="navbar-text pull-left">&copy; Copyright 2013 Cursos Audiovisuales VNQ S.L.</p>
+		<p class="navbar-text pull-right">Site powered by Django 1.6</p>
 	</div>
 </div>
+<!--<div class="row clearfix footer">
+	<div class="col-md-2 column">
+	</div>
+	<div class="col-md-6 column">
+	&copy; Copyright 2013 Cursos Audiovisuales VNQ S.L.
+	</div>
+	<div class="col-md-2 column">
+	</div>
+</div>-->
+{% block aux_scripts %}
+{% endblock %}
 </body>
 </html>

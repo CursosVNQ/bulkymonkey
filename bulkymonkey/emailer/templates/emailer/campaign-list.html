@@ -1,0 +1,37 @@
+{% extends "emailer/base.html" %}
+{% load i18n %}
+
+{% block extra_title %}campaigns{% endblock %}
+
+{% block content %}
+<h2>{% trans "Campaigns" %} 
+	<span class="pull-right">
+		<a href="{% url 'bulkymonkey:campaign-create' %}" class="btn btn-success">
+			<span class="glyphicon glyphicon-plus"></span>
+			{% trans "Add campaign" %}
+		</a>
+	</span>
+</h2>
+<hr>
+<ul>
+{% for campaign in object_list %}
+  <li><a href="{{ campaign.get_absolute_url }}">{{ campaign.title }}</a></li>
+{% endfor %}
+</ul>
+
+{% if is_paginated %}
+    <div class="pagination">
+        <span class="page-links">
+            {% if page_obj.has_previous %}
+                <a href="{% url 'bulkymonkey:campaign-list' %}?page={{ page_obj.previous_page_number }}">{% trans "previous" %}</a>
+            {% endif %}
+            <span class="page-current">
+                {% trans "Page" %} {{ page_obj.number }} {% trans "of" %} {{ page_obj.paginator.num_pages }}.
+            </span>
+            {% if page_obj.has_next %}
+                <a href="{% url 'bulkymonkey:campaign-list' %}?page={{ page_obj.next_page_number }}">{% trans "next" %}</a>
+            {% endif %}
+        </span>
+    </div>
+{% endif %}
+{% endblock %}

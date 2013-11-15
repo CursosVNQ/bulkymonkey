@@ -1,5 +1,7 @@
 from django.db import models
+from django.db.models import permalink
 from django.utils.translation import ugettext_lazy as _
+from .utils import get_filename_function
 
 # Create your models here.
 
@@ -50,3 +52,23 @@ class Sector(TimeAwareModel):
 
     def __unicode__(self):
         return self.name
+
+
+class Campaign(TimeAwareModel):
+    class Meta:
+        ordering = ['-created_on']
+        verbose_name = _('Campaign')
+        verbose_name_plural = _('Campaigns')
+
+    title = models.CharField(_('Title'), max_length=50)
+    html_mail = models.FileField(upload_to=get_filename_function('campaigns'))
+
+    def __str__(self):
+        return self.title
+
+    def __unicode__(self):
+        return self.title
+
+    @permalink
+    def get_absolute_url(self):
+        return ('bulkymonkey:campaign-detail', (), {'pk': self.id})

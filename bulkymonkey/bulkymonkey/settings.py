@@ -42,6 +42,8 @@ INSTALLED_APPS = (
 THIRD_PARTY_APPS = (
     'django_extensions',
     'djrill',
+    'floppyforms',
+    'crispy_forms',
 )
 INSTALLED_APPS += THIRD_PARTY_APPS
 
@@ -99,3 +101,5 @@ MANDRILL_API_KEY = "<your Mandrill key>"
 EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
 
 INTERNAL_IPS = ('127.0.0.1',)
+
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
