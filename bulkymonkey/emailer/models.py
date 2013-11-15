@@ -4,25 +4,36 @@ from django.utils.translation import ugettext_lazy as _
 # Create your models here.
 
 
+class TimeAwareModel(models.Model):
+    created_on = models.DateTimeField(_('Created on'), auto_now_add=True)
+    modified_on = models.DateTimeField(_('Modified on'), auto_now=True)
+
+
+class Sector(TimeAwareModel):
+    class Meta:
+        verbose_name = _('Sector')
+        verbose_name_plural = _('Sectors')
+
+    name = models.CharField(_('Sector name'), max_length=50)
+
+
 class EmailManager(models.Manager):
 
-    def by_kind(self, kind):
+    def by_sector(self, sector):
         """
-        Returns a queryset with translated strings
+        Returns a queryset filtered by sector
         """
 
-        return self.get_queryset().filter(kind=kind)
+        return self.get_queryset().filter(sector__name=sector)
 
 
-class Email(models.Model):
+class Email(TimeAwareModel):
     class Meta:
         verbose_name = _('Email')
         verbose_name_plural = _('Emails')
 
-    address = models.EmailField(_('Email address'))
-    kind = models.CharField(_('Kind'), max_length=50)
-    created_on = models.DateTimeField(_('Created on'), auto_now_add=True)
-    modified_on = models.DateTimeField(_('Modified on'), auto_now=True)
+    address = models.EmailField(_('Email address'), unique=True)
+    sector = models.ForeignKey(Sector)
 
     objects = EmailManager()
 
