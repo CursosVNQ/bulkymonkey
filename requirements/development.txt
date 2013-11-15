@@ -1,0 +1,3 @@
+-r production.txt
+ipdb==0.8
+django-debug-toolbar==0.11.0
