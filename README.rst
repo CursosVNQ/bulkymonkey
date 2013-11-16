@@ -11,7 +11,7 @@ Quickstart
 .. code-block :: bash
 
     $ cd yourfavdir
-    $ git clone <git repo>
+    $ git clone git@github.com:CursosVNQ/bulkymonkey.git
     $ cd bulkymonkey
     $ mkvirtualenv bulkymonkey
     $ pip install -r requirements.txt
