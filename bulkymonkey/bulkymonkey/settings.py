@@ -99,7 +99,7 @@ class Common(Configuration):
     MEDIA_URL = '/media/'
 
     # Djrill configuration
-    MANDRILL_API_KEY = "<your Mandrill key>"
+    MANDRILL_API_KEY = values.Value('', environ=True)
     EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
 
     INTERNAL_IPS = ('127.0.0.1',)
