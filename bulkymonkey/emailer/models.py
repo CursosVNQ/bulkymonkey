@@ -63,6 +63,14 @@ class Sector(TimeAwareModel):
     def __unicode__(self):
         return self.name
 
+    @permalink
+    def get_absolute_url(self):
+        return ('bulkymonkey:sector-detail', (), {'pk': self.id})
+
+    @permalink
+    def get_delete_url(self):
+        return ('bulkymonkey:sector-delete', (), {'pk': self.id})
+
 
 class Campaign(TimeAwareModel):
     class Meta:

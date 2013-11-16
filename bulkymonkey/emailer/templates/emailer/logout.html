@@ -1,0 +1,17 @@
+{% extends "emailer/base.html" %}
+{% load i18n %}
+
+{% block extra_title %}logout{% endblock %}
+
+{% block extra_header %}
+	<link href="{{ STATIC_URL }}css/login.css" rel="stylesheet">
+{% endblock %}
+
+{% block navigation %}{% endblock %}
+
+{% block body %}
+	<div class="container">
+		<h2 class="form-signin-heading">{% trans "Thank you, come back soon" %}</h2>
+		<a href="{% url 'login' %}" class="btn btn-success">{% trans "Sign in" %}</a>
+    </div>
+{% endblock %}

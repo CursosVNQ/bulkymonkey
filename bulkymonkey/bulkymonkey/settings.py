@@ -59,6 +59,7 @@ class Common(Configuration):
 
     MIDDLEWARE_CLASSES = (
         'django.contrib.sessions.middleware.SessionMiddleware',
+        'django.middleware.locale.LocaleMiddleware',
         'django.middleware.common.CommonMiddleware',
         'django.middleware.csrf.CsrfViewMiddleware',
         'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -115,6 +116,8 @@ class Common(Configuration):
         "django.contrib.messages.context_processors.messages",
         "emailer.context_processors.display_version"
     )
+
+    LOGIN_REDIRECT_URL = '/'
 
 
 class Dev(Common):

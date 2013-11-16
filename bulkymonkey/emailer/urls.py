@@ -13,6 +13,12 @@ urlpatterns = patterns(
     url(r'^campaign/(?P<pk>\d+)$', CampaignDetailView.as_view(), name='campaign-detail'),
     url(r'^campaign/(?P<pk>\d+)/delete$', CampaignDeleteView.as_view(), name='campaign-delete'),
 
+    # Sector
+    # url(r'^sectors$', SectorListView.as_view(), name='sector-list'),
+    url(r'^sector/add$', SectorCreateView.as_view(), name='sector-create'),
+    url(r'^sector/(?P<pk>\d+)$', SectorDetailView.as_view(), name='sector-detail'),
+    url(r'^sector/(?P<pk>\d+)/delete$', SectorDeleteView.as_view(), name='sector-delete'),
+
     # Ajax
     url(r'^sectors/chart$', SectorsChartDataView.as_view(), name='sectors-chart-ajax'),
 )

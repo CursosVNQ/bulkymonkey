@@ -4,24 +4,40 @@
 {% block extra_title %}dashboard{% endblock %}
 
 {% block content %}
-<h2>{% trans "Sectors" %}</h2>
+<h2>
+    {% trans "Sectors" %}
+    <span class="pull-right">
+        <a href="{% url 'bulkymonkey:sector-create' %}" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span>
+            {% trans "Add sector" %}
+        </a>
+    </span>
+</h2>
 <hr>
 <div class="row">
     <div class="col-md-6">
         {% for sector in sectors %}
           <div>
-              <h3>{{ sector.name }} ({{ sector.num_emails }})</h3>
+              <a href="{{ sector.get_absolute_url }}">{{ sector.name }} ({{ sector.num_emails }})</a>
           </div>
         {% endfor %}
         <div>
-            <h3>Total ({{ total_emails }})</h3>
+            <h5>{% trans "Total" %} ({{ total_emails }} {% trans "emails" %})</h5>
         </div>
     </div>
     <div class="col-md-6">
-        <svg id="chart-sectors" style="height:300px;width:300px"></svg>
+        <svg id="chart-sectors" style="height:300px;width:400px"></svg>
     </div>
 </div>
-<h2>{% trans "Latest campaigns" %}</h2>
+<h2>
+    {% trans "Latest campaigns" %}
+    <span class="pull-right">
+        <a href="{% url 'bulkymonkey:campaign-create' %}" class="btn btn-success">
+            <span class="glyphicon glyphicon-plus"></span>
+            {% trans "Add campaign" %}
+        </a>
+    </span>
+</h2>
 <hr>
 <ul>
 {% for campaign in latest_campaigns %}
@@ -37,7 +53,7 @@
     // Chart Draw Function
     function drawChart(chart, data) {
         var chart_selector = "#" + chart;
-        var width = 300,
+        var width = 400,
             height = 300;
         nv.addGraph(function() {
             var chart = nv.models.pieChart()

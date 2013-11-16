@@ -12,6 +12,8 @@ urlpatterns = patterns('',
 
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include(emailer.urls, namespace='bulkymonkey')),
+    url(r'^accounts/login/$', 'django.contrib.auth.views.login', {'template_name': 'emailer/login.html'},  name="login"),
+    url(r'^accounts/logout/$', 'django.contrib.auth.views.logout', {'template_name': 'emailer/logout.html'}, name="logout"),
 )
 
 if settings.DEBUG:
