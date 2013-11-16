@@ -46,3 +46,6 @@ docs/_build
 
 # Media dir
 bulkymonkey/media/*
+
+# Envdir
+bulkymonkey/bulkymonkey_env/*
