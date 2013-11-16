@@ -15,6 +15,7 @@ Quickstart
     $ cd bulkymonkey
     $ mkvirtualenv bulkymonkey
     $ pip install -r requirements.txt
+    $ python bulkymonkey/manage.py syncdb
     $ python bulkymonkey/manage.py runserver
 
 
