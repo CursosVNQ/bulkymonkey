@@ -1,0 +1,12 @@
+{% extends "emailer/base.html" %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block extra_title %}delete{% endblock %}
+
+{% block content %}
+<h2>{% trans "Delete" %} {{ object.title }}</h2>
+<hr>
+<h3>{% trans "This item will be removed. Are you sure?" %}</h3>
+{% crispy form %}
+{% endblock %}

@@ -96,6 +96,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
 # Djrill configuration
 MANDRILL_API_KEY = "<your Mandrill key>"
 EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"

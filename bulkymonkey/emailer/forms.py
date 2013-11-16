@@ -8,6 +8,14 @@ import floppyforms as forms
 from .models import Campaign
 
 
+class DeleteForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('submit', _('Delete')))
+        super(DeleteForm, self).__init__(*args, **kwargs)
+
+
 class CampaignForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):

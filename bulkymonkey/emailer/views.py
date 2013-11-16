@@ -1,6 +1,7 @@
-# from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse
+from django.contrib import messages
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import TemplateView, View, DetailView, ListView, CreateView
+from django.views.generic import TemplateView, View, DetailView, ListView, CreateView, DeleteView
 from braces.views import AjaxResponseMixin, JSONResponseMixin
 from .models import *
 from .forms import *
@@ -39,6 +40,22 @@ class CampaignCreateView(CampaignsNavButtonOnMixin, CreateView):
 class CampaignDetailView(CampaignsNavButtonOnMixin, DetailView):
     model = Campaign
     template_name = "emailer/campaign-detail.html"
+
+
+class CampaignDeleteView(CampaignsNavButtonOnMixin, DeleteView):
+    model = Campaign
+    form_class = DeleteForm
+    template_name = "emailer/delete.html"
+    success_message = _("Campaign deleted successfully")
+
+    def get_context_data(self, **kwargs):
+        context = super(CampaignDeleteView, self).get_context_data(**kwargs)
+        context['form'] = self.form_class()
+        return context
+
+    def get_success_url(self):
+        messages.success(self.request, self.success_message)
+        return reverse('bulkymonkey:campaign-list')
 
 
 class CampaignListView(CampaignsNavButtonOnMixin, ListView):

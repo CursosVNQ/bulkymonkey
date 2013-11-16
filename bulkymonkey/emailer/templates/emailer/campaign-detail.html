@@ -6,12 +6,14 @@
 {% block content %}
 <h2>{{ object.title }}
     <span class="pull-right">
-        <a href="#" class="btn btn-danger">
+        <a href="{% url 'bulkymonkey:campaign-delete' object.pk %}" class="btn btn-danger">
             <span class="glyphicon glyphicon-trash"></span>
             {% trans "Delete campaign" %}
         </a>
     </span>
 </h2>
 <hr>
-
+{% if object.html_mail %}
+    <iframe style="width: 100%; height: 600px;" src="{{ object.html_mail.url }}"></iframe>
+{% endif %}
 {% endblock %}

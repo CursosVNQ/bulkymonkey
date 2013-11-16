@@ -1,9 +1,19 @@
 from django.db import models
 from django.db.models import permalink
+from django.db.models.signals import post_delete
+from django.db.models.fields.files import FileField
 from django.utils.translation import ugettext_lazy as _
 from .utils import get_filename_function
 
 # Create your models here.
+
+
+def delete_files_handler(sender, instance, **kwargs):
+    for field in instance._meta.fields:
+        if isinstance(field, FileField):
+            f = getattr(instance, field.name)
+            if f:
+                f.delete(save=False)
 
 
 class TimeAwareModel(models.Model):
@@ -72,3 +82,10 @@ class Campaign(TimeAwareModel):
     @permalink
     def get_absolute_url(self):
         return ('bulkymonkey:campaign-detail', (), {'pk': self.id})
+
+    @permalink
+    def get_delete_url(self):
+        return ('bulkymonkey:campaign-delete', (), {'pk': self.id})
+
+
+post_delete.connect(delete_files_handler, Campaign)

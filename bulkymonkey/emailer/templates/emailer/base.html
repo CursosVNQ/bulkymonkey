@@ -95,6 +95,22 @@
 			<br><br><br>
 			<div class="row clearfix">
 				<div class="col-md-12 column">
+				{% if message_level %}
+				        <div class="alert alert-{{ message_level|default:"success" }} fade in">
+				            <button data-dismiss="alert" class="close" type="button">×</button>
+				            {{ message_info|safe }}
+				            {% if message_link and message_link_text %}
+				                <a href="{{ message_link }}">{{ message_link_text }}</a>
+				            {% endif %}
+				        </div>
+				{% elif messages %}
+				    {% for message in messages %}
+				        <div class="alert alert-{{ message.tags|default:"success" }} fade in">
+				            <button data-dismiss="alert" class="close" type="button">×</button>
+				            {{ message|safe }}
+				        </div>
+				    {% endfor %}
+				{% endif %}
 				{% block content %}{% endblock %}
 				</div>
 			</div>
