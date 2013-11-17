@@ -24,4 +24,8 @@ urlpatterns = patterns(
 
     # Load emails
     url(r'^load-emails$', LoadEmailsFromFileView.as_view(), name='load-emails'),
+
+    # Send emails
+    url(r'^send-emails$', SendEmailsView.as_view(), name='send-emails'),
+
 )

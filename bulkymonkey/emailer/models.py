@@ -80,7 +80,8 @@ class Campaign(TimeAwareModel):
 
     title = models.CharField(_('Title'), max_length=50)
     html_mail = models.FileField(upload_to=get_filename_function('campaigns'))
-    from_email = models.CharField(_('From'), max_length=50)
+    from_name = models.CharField(_('From (name)'), max_length=50)
+    from_email = models.CharField(_('From (email)'), max_length=50)
     tags = models.CharField(_('Tags'), max_length=50, blank=True)
 
     def __str__(self):
@@ -96,6 +97,9 @@ class Campaign(TimeAwareModel):
     @permalink
     def get_delete_url(self):
         return ('bulkymonkey:campaign-delete', (), {'pk': self.id})
+
+    def get_tags(self):
+        return [t.strip() for t in self.tags.split(',') if t.strip()]
 
 
 post_delete.connect(delete_files_handler, Campaign)

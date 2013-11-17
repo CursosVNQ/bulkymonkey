@@ -23,10 +23,10 @@ admin.site.register(Email, EmailAdmin)
 
 
 class CampaignAdmin(admin.ModelAdmin):
-    fields = ['title', 'from_email', 'html_mail', 'tags', 'created_on', 'modified_on']
+    fields = ['title', 'from_name', 'from_email', 'html_mail', 'tags', 'created_on', 'modified_on']
     readonly_fields = ('created_on', 'modified_on')
     list_display = ('title', 'from_email', 'created_on')
     list_filter = ['created_on', 'from_email']
-    search_fields = ['title', 'tags']
+    search_fields = ['title', 'tags', 'from_name', 'from_email']
 
 admin.site.register(Campaign, CampaignAdmin)

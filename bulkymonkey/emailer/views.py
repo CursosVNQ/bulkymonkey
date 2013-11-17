@@ -6,6 +6,7 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import TemplateView, View, DetailView, ListView, CreateView, DeleteView, FormView
+from django.core.mail import EmailMultiAlternatives
 from braces.views import AjaxResponseMixin, JSONResponseMixin, LoginRequiredMixin, StaffuserRequiredMixin
 from .models import *
 from .forms import *
@@ -20,7 +21,10 @@ class PaginateMixin(object):
 
     def get_context_data(self, **kwargs):
         context = super(PaginateMixin, self).get_context_data(**kwargs)
-        object_list = self.paginate_queryset or self.paginate_model.objects.all()
+        if self.paginate_queryset is not None:
+            object_list = self.paginate_queryset
+        else:
+            object_list = self.paginate_model.objects.all()
         paginator = Paginator(object_list, self.paginate_by)  # Show self.paginate_by contacts per page
 
         context['is_paginated'] = len(object_list) > self.paginate_by
@@ -41,6 +45,13 @@ class PaginateMixin(object):
         else:
             context[self.paginate_ctx_name] = object_list
         return context
+
+
+class SectorChoicesInitialMixin(object):
+    def get_initial(self):
+        initial = super(SectorChoicesInitialMixin, self).get_initial()
+        initial['sectors'] = Sector.objects.all().values_list('pk', 'name')
+        return initial
 
 
 class IndexView(LoginRequiredMixin, StaffuserRequiredMixin, TemplateView):
@@ -158,7 +169,7 @@ class SectorsChartDataView(LoginRequiredMixin, StaffuserRequiredMixin, JSONRespo
 #### Load emails from file ####
 
 
-class LoadEmailsFromFileView(SuccessMessageMixin, FormView):
+class LoadEmailsFromFileView(SectorChoicesInitialMixin, SuccessMessageMixin, FormView):
     template_name = "emailer/load-emails.html"
     form_class = LoadEmailsFromFileForm
     success_message = _('{num_emails} emails were added to {sector}')
@@ -167,11 +178,6 @@ class LoadEmailsFromFileView(SuccessMessageMixin, FormView):
     @method_decorator(transaction.atomic)
     def dispatch(self, request, *args, **kwargs):
         return super(LoadEmailsFromFileView, self).dispatch(request, *args, **kwargs)
-
-    def get_initial(self):
-        initial = super(LoadEmailsFromFileView, self).get_initial()
-        initial['sectors'] = Sector.objects.all().values_list('pk', 'name')
-        return initial
 
     def form_valid(self, form):
         self.emails_to_load = form.cleaned_data['data'].splitlines()
@@ -183,3 +189,43 @@ class LoadEmailsFromFileView(SuccessMessageMixin, FormView):
     def get_success_message(self, cleaned_data):
         return self.success_message.format(sector=cleaned_data['sector'],
                                            num_emails=len(self.emails_to_load))
+
+
+#### Send emails ####
+
+
+class SendEmailsView(SectorChoicesInitialMixin, SuccessMessageMixin, FormView):
+    template_name = "emailer/send-emails.html"
+    form_class = SendEmailsForm
+    success_message = _('{num_emails} emails from {sector} were queued in Mandrill')
+    success_url = reverse_lazy('bulkymonkey:index')
+
+    def get_initial(self):
+        initial = super(SendEmailsView, self).get_initial()
+        initial['campaigns'] = Campaign.objects.all().values_list('pk', 'title')
+        return initial
+
+    def form_valid(self, form):
+        sector = form.cleaned_data['sector']
+        self.num_emails = sector.email_set.count()
+        campaign = form.cleaned_data['campaign']
+        msg = EmailMultiAlternatives(
+            subject=campaign.title,
+            body='',
+            from_email="{from_name} <{from_email}>".format(from_name=campaign.from_name,
+                                                           from_email=campaign.from_email),
+        )
+        msg.attach_alternative(campaign.html_mail.read(), "text/html")
+
+        # Optional Mandrill-specific extensions:
+        msg.tags = campaign.get_tags()
+
+        for email in sector.email_set.all():
+            msg.to = [email.address]
+            msg.send()
+
+        return super(SendEmailsView, self).form_valid(form)
+
+    def get_success_message(self, cleaned_data):
+        return self.success_message.format(sector=cleaned_data['sector'],
+                                           num_emails=self.num_emails)
