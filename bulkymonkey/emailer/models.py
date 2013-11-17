@@ -80,6 +80,8 @@ class Campaign(TimeAwareModel):
 
     title = models.CharField(_('Title'), max_length=50)
     html_mail = models.FileField(upload_to=get_filename_function('campaigns'))
+    from_email = models.CharField(_('From'), max_length=50)
+    tags = models.CharField(_('Tags'), max_length=50, blank=True)
 
     def __str__(self):
         return self.title
