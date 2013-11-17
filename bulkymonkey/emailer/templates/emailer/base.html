@@ -49,7 +49,7 @@
 			{% block navigation %}
 			<nav class="navbar navbar-default navbar-inverse navbar-fixed-top" role="navigation">
 				<div class="navbar-header">
-					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">Bulky Monkey v{{ app_version }}</a>
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="{% url 'bulkymonkey:index' %}">Bulky Monkey v{{ app_version }}</a>
 				</div>
 				
 				<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -67,7 +67,7 @@
 							 <a href="#" class="dropdown-toggle" data-toggle="dropdown"><span class="glyphicon glyphicon-wrench"></span> {% trans "More actions" %}<strong class="caret"></strong></a>
 							<ul class="dropdown-menu">
 								<li>
-									<a href="#"><span class="glyphicon glyphicon-open"></span> {% trans "Load emails from file" %}</a>
+									<a href="{% url 'bulkymonkey:load-emails' %}"><span class="glyphicon glyphicon-open"></span> {% trans "Load emails from file" %}</a>
 								</li>
 							</ul>
 						</li>
@@ -85,7 +85,6 @@
 						</li>
 					</ul>
 				</div>
-				
 			</nav>
 			{% endblock %}
 			<br><br><br>

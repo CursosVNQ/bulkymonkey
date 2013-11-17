@@ -1,7 +1,10 @@
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
+from django.db import transaction
 from django.contrib import messages
+from django.contrib.messages.views import SuccessMessageMixin
+from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
-from django.views.generic import TemplateView, View, DetailView, ListView, CreateView, DeleteView
+from django.views.generic import TemplateView, View, DetailView, ListView, CreateView, DeleteView, FormView
 from braces.views import AjaxResponseMixin, JSONResponseMixin, LoginRequiredMixin, StaffuserRequiredMixin
 from .models import *
 from .forms import *
@@ -109,3 +112,33 @@ class SectorsChartDataView(LoginRequiredMixin, StaffuserRequiredMixin, JSONRespo
         for sector in Sector.objects.all():
             response.append({'label': sector.name, 'value': sector.num_emails})
         return self.render_json_response(response)
+
+
+#### Load emails from file ####
+
+
+class LoadEmailsFromFileView(SuccessMessageMixin, FormView):
+    template_name = "emailer/load-emails.html"
+    form_class = LoadEmailsFromFileForm
+    success_message = _('{num_emails} emails were added to {sector}')
+    success_url = reverse_lazy('bulkymonkey:index')
+
+    @method_decorator(transaction.atomic)
+    def dispatch(self, request, *args, **kwargs):
+        return super(LoadEmailsFromFileView, self).dispatch(request, *args, **kwargs)
+
+    def get_initial(self):
+        initial = super(LoadEmailsFromFileView, self).get_initial()
+        initial['sectors'] = Sector.objects.all().values_list('pk', 'name')
+        return initial
+
+    def form_valid(self, form):
+        self.emails_to_load = form.cleaned_data['data'].splitlines()
+        for address in self.emails_to_load:
+            email = Email.objects.get_or_create(address=address)[0]
+            email.sectors.add(form.cleaned_data['sector'])
+        return super(LoadEmailsFromFileView, self).form_valid(form)
+
+    def get_success_message(self, cleaned_data):
+        return self.success_message.format(sector=cleaned_data['sector'],
+                                           num_emails=len(self.emails_to_load))

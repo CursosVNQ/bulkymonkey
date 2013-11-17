@@ -21,4 +21,7 @@ urlpatterns = patterns(
 
     # Ajax
     url(r'^sectors/chart$', SectorsChartDataView.as_view(), name='sectors-chart-ajax'),
+
+    # Load emails
+    url(r'^load-emails$', LoadEmailsFromFileView.as_view(), name='load-emails'),
 )

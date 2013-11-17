@@ -63,3 +63,38 @@ class SectorForm(forms.ModelForm):
     class Meta:
         model = Sector
         fields = ('name',)
+
+
+class LoadEmailsFromFileForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        super(LoadEmailsFromFileForm, self).__init__(*args, **kwargs)
+        self.fields['sector'] = forms.ChoiceField(choices=kwargs['initial']['sectors'],
+                                                  help_text=_('The emails contained in the file will be bound to this sector'))
+        self.fields['data'] = forms.FileField(help_text=_('Plain text file containing line separated emails'))
+
+        # Crispy form
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field('sector'),
+            Field('data'),
+            FormActions(
+                Button('cancel', _('Cancel'), onclick='history.go(-1);'),
+                Submit('submit', _('Create')),
+            )
+        )
+
+    def clean_data(self):
+        data = self.cleaned_data['data']
+        if data.content_type not in ('text/plain',):
+            raise forms.ValidationError(_("Incorrect file type"))
+
+        return data.read()
+
+    def clean_sector(self):
+        try:
+            data = Sector.objects.get(pk=self.cleaned_data['sector'])
+        except Sector.DoesNotExist:
+            raise forms.ValidationError(_("Sector does not exist"))
+
+        return data

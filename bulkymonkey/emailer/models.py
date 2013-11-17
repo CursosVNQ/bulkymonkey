@@ -37,7 +37,7 @@ class Email(TimeAwareModel):
         verbose_name_plural = _('Emails')
 
     address = models.EmailField(_('Email address'), unique=True)
-    sector = models.ManyToManyField('Sector', null=True)
+    sectors = models.ManyToManyField('Sector', null=True)
 
     objects = EmailManager()
 
@@ -55,7 +55,7 @@ class Sector(TimeAwareModel):
 
     @property
     def num_emails(self):
-        return Email.objects.filter(sector=self).count()
+        return self.email_set.count()
 
     def __str__(self):
         return self.name
