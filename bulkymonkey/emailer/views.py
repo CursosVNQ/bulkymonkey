@@ -4,10 +4,43 @@ from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import TemplateView, View, DetailView, ListView, CreateView, DeleteView, FormView
 from braces.views import AjaxResponseMixin, JSONResponseMixin, LoginRequiredMixin, StaffuserRequiredMixin
 from .models import *
 from .forms import *
+
+
+class PaginateMixin(object):
+    paginate_model = None
+    paginate_ctx_name = 'object_list'
+    paginator_obj_ctx_name = 'page_obj'
+    paginate_by = 10
+    paginate_queryset = None
+
+    def get_context_data(self, **kwargs):
+        context = super(PaginateMixin, self).get_context_data(**kwargs)
+        object_list = self.paginate_queryset or self.paginate_model.objects.all()
+        paginator = Paginator(object_list, self.paginate_by)  # Show self.paginate_by contacts per page
+
+        context['is_paginated'] = len(object_list) > self.paginate_by
+
+        if context['is_paginated']:
+            page = self.request.GET.get('page')
+            try:
+                objects = paginator.page(page)
+            except PageNotAnInteger:
+                # If page is not an integer, deliver first page.
+                objects = paginator.page(1)
+            except EmptyPage:
+                # If page is out of range (e.g. 9999), deliver last page of results.
+                objects = paginator.page(paginator.num_pages)
+
+            context[self.paginator_obj_ctx_name] = objects
+            context[self.paginate_ctx_name] = objects
+        else:
+            context[self.paginate_ctx_name] = object_list
+        return context
 
 
 class IndexView(LoginRequiredMixin, StaffuserRequiredMixin, TemplateView):
@@ -64,7 +97,7 @@ class CampaignDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, CampaignsNa
 class CampaignListView(LoginRequiredMixin, StaffuserRequiredMixin, CampaignsNavButtonOnMixin, ListView):
     model = Campaign
     template_name = "emailer/campaign-list.html"
-    paginate_by = 5
+    paginate_by = 10
 
 
 #### Sector ####
@@ -83,9 +116,17 @@ class SectorCreateView(LoginRequiredMixin, StaffuserRequiredMixin, SectorsNavBut
     template_name = "emailer/sector-create.html"
 
 
-class SectorDetailView(LoginRequiredMixin, StaffuserRequiredMixin, SectorsNavButtonOnMixin, DetailView):
+class SectorDetailView(LoginRequiredMixin, StaffuserRequiredMixin, PaginateMixin, SectorsNavButtonOnMixin, DetailView):
     model = Sector
     template_name = "emailer/sector-detail.html"
+    paginate_by = 50
+    paginate_ctx_name = 'email_list'
+
+    def get_context_data(self, **kwargs):
+        self.paginate_queryset = self.object.email_set.all()
+        context = super(SectorDetailView, self).get_context_data(**kwargs)
+        context['num_emails'] = len(context[self.paginate_ctx_name])
+        return context
 
 
 class SectorDeleteView(LoginRequiredMixin, StaffuserRequiredMixin, SectorsNavButtonOnMixin, DeleteView):
