@@ -37,7 +37,7 @@ class Email(TimeAwareModel):
         verbose_name_plural = _('Emails')
 
     address = models.EmailField(_('Email address'), unique=True)
-    sector = models.ForeignKey('Sector', null=True)
+    sector = models.ManyToManyField('Sector', null=True)
 
     objects = EmailManager()
 

@@ -15,7 +15,7 @@ admin.site.register(Sector, SectorAdmin)
 class EmailAdmin(admin.ModelAdmin):
     fields = ['address', 'sector', 'created_on', 'modified_on']
     readonly_fields = ('created_on', 'modified_on')
-    list_display = ('address', 'sector', 'created_on')
+    list_display = ('address', 'created_on')
     list_filter = ['created_on', 'sector']
     search_fields = ['address']
 
