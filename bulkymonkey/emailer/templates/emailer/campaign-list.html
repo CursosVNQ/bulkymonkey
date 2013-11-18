@@ -13,11 +13,15 @@
 	</span>
 </h2>
 <hr>
-<ul>
-{% for campaign in object_list %}
-  <li><a href="{{ campaign.get_absolute_url }}">{{ campaign.title }}</a></li>
-{% endfor %}
-</ul>
+<div class="table-responsive">
+    <table class="table table-striped">
+    {% for campaign in object_list %}
+      <tr><td><a href="{{ campaign.get_absolute_url }}">{{ campaign.title }}</a></td></tr>
+    {% empty %}
+      <tr><td>{% trans "There are no campaigns" %}</td></tr>
+    {% endfor %}
+    </table>
+</div>
 
 {% include "emailer/common/paginator.html" %}
 

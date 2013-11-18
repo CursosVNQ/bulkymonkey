@@ -23,6 +23,7 @@
                 <th>{% trans "Sector" %}</th>
                 <th>{% trans "Emails sent" %}</th>
                 <th>{% trans "Status" %}</th>
+                <th>{% trans "Date of dispatch" %}</th>
             </tr>
             {% for log in campaign_logs %}
               <tr>
@@ -36,6 +37,7 @@
                         <span class="glyphicon glyphicon-minus-sign"></span>
                     {% endif %}
                 </td>
+                <td>{{ log.created_on }}</td>
               </tr>
             {% endfor %}
             </table>
@@ -77,13 +79,15 @@
     </span>
 </h2>
 <hr>
-<ul>
-{% for campaign in latest_campaigns %}
-  <li><a href="{{ campaign.get_absolute_url }}">{{ campaign.title }}</a></li>
-{% empty %}
-  <li>{% trans "There are no campaigns" %}</li>
-{% endfor %}
-</ul>
+<div class="table-responsive">
+    <table class="table table-striped">
+    {% for campaign in latest_campaigns %}
+      <tr><td><a href="{{ campaign.get_absolute_url }}">{{ campaign.title }}</a></td></tr>
+    {% empty %}
+      <tr><td>{% trans "There are no campaigns" %}</td></tr>
+    {% endfor %}
+    </table>
+</div>
 {% endblock %}
 
 {% block aux_scripts %}

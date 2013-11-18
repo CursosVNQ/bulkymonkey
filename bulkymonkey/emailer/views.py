@@ -226,6 +226,8 @@ class SendEmailsView(SectorChoicesInitialMixin, SuccessMessageMixin, FormView):
         # Optional Mandrill-specific extensions:
         msg.tags = campaign.get_tags()
         msg.async = True
+        msg.track_opens = True
+        msg.track_clicks = True
 
         # Send to Mandrill
         for email in sector.email_set.all():
