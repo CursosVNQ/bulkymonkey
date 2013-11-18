@@ -13,6 +13,26 @@
     </span>
 </h2>
 <hr>
+<div class="table-responsive">
+    <table class="table table-striped">
+      <tr>
+      	<th>{% trans "From (name)" %}</th>
+      	<td>{{ object.from_name }}</td>
+      </tr>
+      <tr>
+      	<th>{% trans "From (email)" %}</th>
+      	<td>{{ object.from_email }}</td>
+      </tr>
+      <tr>
+      	<th>{% trans "Tags" %}</th>
+      	<td>
+      		{% for tag in object.get_tags %}
+      			<span class="label label-default">{{ tag }}</span>
+      		{% endfor %}
+      	</td>
+      </tr>
+    </table>
+</div>
 {% if object.html_mail %}
     <iframe style="width: 100%; height: 600px;" src="{{ object.html_mail.url }}"></iframe>
 {% endif %}

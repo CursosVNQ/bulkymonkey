@@ -1,0 +1,310 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-11-18 19:58+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: emailer/forms.py:16 emailer/templates/emailer/delete.html:8
+msgid "Delete"
+msgstr "Borrar"
+
+#: emailer/forms.py:25
+msgid "This title will be the subject of the email"
+msgstr "Este título será el asunto del email"
+
+#: emailer/forms.py:26
+msgid "The campaign will be sent showing this name in the sender name"
+msgstr "La campaña será enviada mostrando este nombre como remite"
+
+#: emailer/forms.py:27
+msgid "The campaign will be sent from this email account"
+msgstr "La campaña será enviada desde esta cuenta de correo"
+
+#: emailer/forms.py:28
+msgid "HTML file with the content that will be sent to the users"
+msgstr "Fichero HTML con el contenido que será enviado"
+
+#: emailer/forms.py:29
+msgid ""
+"List of comma separated tags that can be used to identify emails in Mandrill "
+"(Optional)"
+msgstr "Lista de tags separados por comas que podrán ser usados para identificar emails en Mandrill (Opcional)"
+
+#: emailer/forms.py:40 emailer/forms.py:60 emailer/forms.py:84
+#: emailer/forms.py:120
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: emailer/forms.py:41 emailer/forms.py:61 emailer/forms.py:85
+#: emailer/forms.py:121
+msgid "Create"
+msgstr "Añadir"
+
+#: emailer/forms.py:75
+msgid "The emails contained in the file will be bound to this sector"
+msgstr "Los emails contenidos en este fichero serán vinculados a este sector"
+
+#: emailer/forms.py:76
+msgid "Plain text file containing line separated emails"
+msgstr "Fichero en texto plano que contiene un email en cada línea"
+
+#: emailer/forms.py:92
+msgid "Incorrect file type"
+msgstr "Tipo de fichero incorrecto"
+
+#: emailer/forms.py:100 emailer/forms.py:129
+msgid "Sector does not exist"
+msgstr "El sector no existe"
+
+#: emailer/forms.py:110
+msgid "Select the campaign that will be sent"
+msgstr "Selecciona la campaña que será enviada"
+
+#: emailer/forms.py:112
+msgid "The campaign will be sent to the emails contained in this sector"
+msgstr "La campaña será enviada a los emails pertenecientes a este sector"
+
+#: emailer/forms.py:137
+msgid "Campaign does not exist"
+msgstr "La campaña no existe"
+
+#: emailer/models.py:20
+msgid "Created on"
+msgstr "Creado en"
+
+#: emailer/models.py:21
+msgid "Modified on"
+msgstr "Modificado en"
+
+#: emailer/models.py:36
+msgid "Email"
+msgstr "Correo electrónico"
+
+#: emailer/models.py:37
+msgid "Emails"
+msgstr "Correos electrónicos"
+
+#: emailer/models.py:39
+msgid "Email address"
+msgstr "Dirección de correo"
+
+#: emailer/models.py:52 emailer/models.py:88
+#: emailer/templates/emailer/index.html:22
+msgid "Campaign"
+msgstr "Campaña"
+
+#: emailer/models.py:53 emailer/models.py:61
+#: emailer/templates/emailer/index.html:23
+msgid "Sector"
+msgstr "Sector"
+
+#: emailer/models.py:54
+msgid "Sent"
+msgstr "Enviado"
+
+#: emailer/models.py:55
+msgid "Num of sent emails"
+msgstr "Número de emails enviados"
+
+#: emailer/models.py:62 emailer/templates/emailer/index.html:48
+msgid "Sectors"
+msgstr "Sectores"
+
+#: emailer/models.py:64
+msgid "Sector name"
+msgstr "Nombre del sector"
+
+#: emailer/models.py:89 emailer/templates/emailer/base.html:61
+#: emailer/templates/emailer/campaign-list.html:7
+msgid "Campaigns"
+msgstr "Campañas"
+
+#: emailer/models.py:91
+msgid "Title"
+msgstr "Título"
+
+#: emailer/models.py:93
+msgid "From (name)"
+msgstr "De (nombre)"
+
+#: emailer/models.py:94
+msgid "From (email)"
+msgstr "De (email)"
+
+#: emailer/models.py:95
+msgid "Tags"
+msgstr "Etiquetas"
+
+#: emailer/views.py:97
+msgid "Campaign deleted successfully"
+msgstr "Campaña eliminada satisfactoriamente"
+
+#: emailer/views.py:148
+msgid "Sector deleted successfully"
+msgstr "Sector eliminado satisfactoriamente"
+
+#: emailer/views.py:176
+msgid "{num_emails} emails were added to {sector}"
+msgstr "{num_emails} emails fueron añadidos a {sector}"
+
+#: emailer/views.py:201
+msgid "{num_emails} emails from {sector} were queued in Mandrill"
+msgstr "{num_emails} emails de {sector} se encolaron en Mandrill"
+
+#: emailer/templates/emailer/base.html:58
+msgid "Dashboard"
+msgstr "Panel principal"
+
+#: emailer/templates/emailer/base.html:64
+#: emailer/templates/emailer/index.html:12
+msgid "Send campaign"
+msgstr "Enviar campaña"
+
+#: emailer/templates/emailer/base.html:67
+msgid "More actions"
+msgstr "Más acciones"
+
+#: emailer/templates/emailer/base.html:70
+#: emailer/templates/emailer/load-emails.html:8
+msgid "Load emails from file"
+msgstr "Cargar emails desde fichero"
+
+#: emailer/templates/emailer/base.html:73
+msgid "Go to Mandrill"
+msgstr "Ir a Mandrill"
+
+#: emailer/templates/emailer/base.html:76
+msgid "Django admin"
+msgstr "Administración Django"
+
+#: emailer/templates/emailer/base.html:88
+msgid "Logout"
+msgstr "Salir"
+
+#: emailer/templates/emailer/campaign-create.html:8
+#: emailer/templates/emailer/campaign-list.html:11
+#: emailer/templates/emailer/index.html:77
+msgid "Add campaign"
+msgstr "Añadir campaña"
+
+#: emailer/templates/emailer/campaign-detail.html:11
+msgid "Delete campaign"
+msgstr "Eliminar campaña"
+
+#: emailer/templates/emailer/campaign-list.html:21
+#: emailer/templates/emailer/index.html:87
+msgid "There are no campaigns"
+msgstr "No hay campañas"
+
+#: emailer/templates/emailer/delete.html:10
+msgid "This item will be removed. Are you sure?"
+msgstr "Este elemento será eliminado. ¿Deseas continuar?"
+
+#: emailer/templates/emailer/index.html:8
+msgid "Latest actions"
+msgstr "Últimas acciones"
+
+#: emailer/templates/emailer/index.html:24
+msgid "Emails sent"
+msgstr "Emails enviados"
+
+#: emailer/templates/emailer/index.html:25
+msgid "Status"
+msgstr "Estado"
+
+#: emailer/templates/emailer/index.html:26
+msgid "Date of dispatch"
+msgstr "Fecha de envío"
+
+#: emailer/templates/emailer/index.html:52
+#: emailer/templates/emailer/sector-create.html:8
+msgid "Add sector"
+msgstr "Añadir sector"
+
+#: emailer/templates/emailer/index.html:65
+msgid "Total"
+msgstr "Total"
+
+#: emailer/templates/emailer/index.html:65
+#: emailer/templates/emailer/sector-detail.html:7
+msgid "emails"
+msgstr "emails"
+
+#: emailer/templates/emailer/index.html:73
+msgid "Latest campaigns"
+msgstr "Últimas campañas"
+
+#: emailer/templates/emailer/load-emails.html:5
+msgid "load emails"
+msgstr "cargar emails"
+
+#: emailer/templates/emailer/login.html:16
+msgid "Your username and password didn't match. Please try again."
+msgstr "Tu usuario y contraseña no coinciden. Por favor, prueba de nuevo."
+
+#: emailer/templates/emailer/login.html:19
+msgid "Please sign in"
+msgstr "Por favor, inicia sesión"
+
+#: emailer/templates/emailer/login.html:21
+msgid "Username"
+msgstr "Usuario"
+
+#: emailer/templates/emailer/login.html:22
+msgid "Password"
+msgstr "Contraseña"
+
+#: emailer/templates/emailer/login.html:23
+#: emailer/templates/emailer/logout.html:15
+msgid "Sign in"
+msgstr "Inicia sesión"
+
+#: emailer/templates/emailer/logout.html:14
+msgid "Thank you, come back soon"
+msgstr "Gracias, vuelve pronto"
+
+#: emailer/templates/emailer/sector-detail.html:11
+msgid "Delete sector"
+msgstr "Eliminar sector"
+
+#: emailer/templates/emailer/sector-detail.html:21
+msgid "There are no emails"
+msgstr "No hay correos electrónicos"
+
+#: emailer/templates/emailer/send-emails.html:5
+msgid "send emails"
+msgstr "enviar emails"
+
+#: emailer/templates/emailer/send-emails.html:8
+msgid "Send emails"
+msgstr "Enviar Emails"
+
+#: emailer/templates/emailer/common/paginator.html:7
+msgid "previous"
+msgstr "anterior"
+
+#: emailer/templates/emailer/common/paginator.html:10
+msgid "Page"
+msgstr "Página"
+
+#: emailer/templates/emailer/common/paginator.html:10
+msgid "of"
+msgstr "de"
+
+#: emailer/templates/emailer/common/paginator.html:13
+msgid "next"
+msgstr "siguiente"
