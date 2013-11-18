@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Email, Sector, Campaign
+from .models import Email, Sector, Campaign, SentCampaignLog
 
 
 class SectorAdmin(admin.ModelAdmin):
@@ -20,6 +20,16 @@ class EmailAdmin(admin.ModelAdmin):
     search_fields = ['address']
 
 admin.site.register(Email, EmailAdmin)
+
+
+class SentCampaignLogAdmin(admin.ModelAdmin):
+    fields = ['campaign', 'sector', 'num_emails', 'is_sent', 'created_on']
+    readonly_fields = ('created_on', 'modified_on')
+    list_display = ('campaign', 'sector', 'num_emails', 'is_sent', 'created_on')
+    list_filter = ['created_on']
+    search_fields = ['campaign__title', 'sector__name']
+
+admin.site.register(SentCampaignLog, SentCampaignLogAdmin)
 
 
 class CampaignAdmin(admin.ModelAdmin):

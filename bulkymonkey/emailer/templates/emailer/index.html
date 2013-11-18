@@ -5,6 +5,44 @@
 
 {% block content %}
 <h2>
+    {% trans "Latest actions" %}
+    <span class="pull-right">
+        <a href="{% url 'bulkymonkey:send-emails' %}" class="btn btn-success">
+            <span class="glyphicon glyphicon-send"></span>
+            {% trans "Send campaign" %}
+        </a>
+    </span>
+</h2>
+<hr>
+<div class="row">
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table class="table table-striped">
+            <tr>
+                <th>{% trans "Campaign" %}</th>
+                <th>{% trans "Sector" %}</th>
+                <th>{% trans "Emails sent" %}</th>
+                <th>{% trans "Status" %}</th>
+            </tr>
+            {% for log in campaign_logs %}
+              <tr>
+                <td><a href="{{ log.campaign.get_absolute_url }}">{{ log.campaign.title }}</a></td>
+                <td><a href="{{ log.sector.get_absolute_url }}">{{ log.sector.name }}</a></td>
+                <td>{{ log.num_emails }}</td>
+                <td>
+                    {% if log.is_sent %}
+                        <span class="glyphicon glyphicon-ok-sign"></span>
+                    {% else %}
+                        <span class="glyphicon glyphicon-minus-sign"></span>
+                    {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+<h2>
     {% trans "Sectors" %}
     <span class="pull-right">
         <a href="{% url 'bulkymonkey:sector-create' %}" class="btn btn-success">

@@ -66,6 +66,7 @@ class IndexView(LoginRequiredMixin, StaffuserRequiredMixin, TemplateView):
         context['total_emails'] = Email.objects.all().count()
         context['latest_campaigns'] = Campaign.objects.all()[:10]
         context['button_dashboard_on'] = True
+        context['campaign_logs'] = SentCampaignLog.objects.all()[:10]
         return context
 
 #### Campaign ####
@@ -209,6 +210,11 @@ class SendEmailsView(SectorChoicesInitialMixin, SuccessMessageMixin, FormView):
         sector = form.cleaned_data['sector']
         self.num_emails = sector.email_set.count()
         campaign = form.cleaned_data['campaign']
+
+        # Log action
+        campaign_log = SentCampaignLog.objects.create(campaign=campaign, sector=sector, num_emails=self.num_emails)
+
+        # Build message
         msg = EmailMultiAlternatives(
             subject=campaign.title,
             body='',
@@ -219,10 +225,16 @@ class SendEmailsView(SectorChoicesInitialMixin, SuccessMessageMixin, FormView):
 
         # Optional Mandrill-specific extensions:
         msg.tags = campaign.get_tags()
+        msg.async = True
 
+        # Send to Mandrill
         for email in sector.email_set.all():
             msg.to = [email.address]
             msg.send()
+
+        # Change status
+        campaign_log.is_sent = True
+        campaign_log.save()
 
         return super(SendEmailsView, self).form_valid(form)
 

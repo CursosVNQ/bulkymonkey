@@ -45,6 +45,16 @@ class Email(TimeAwareModel):
         return self.address
 
 
+class SentCampaignLog(TimeAwareModel):
+    class Meta:
+        ordering = ('-created_on',)
+
+    campaign = models.ForeignKey('Campaign', verbose_name=_('Campaign'))
+    sector = models.ForeignKey('Sector', verbose_name=_('Sector'))
+    is_sent = models.BooleanField(_('Sent'), default=False)
+    num_emails = models.IntegerField(_('Num of sent emails'))
+
+
 class Sector(TimeAwareModel):
     class Meta:
         ordering = ['name']
