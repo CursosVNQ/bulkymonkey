@@ -7,3 +7,4 @@ django-crispy-forms>=1.4.0
 django-configurations==0.6
 envdir==0.5
 dj-database-url==0.2.2
+python-memcached==1.53

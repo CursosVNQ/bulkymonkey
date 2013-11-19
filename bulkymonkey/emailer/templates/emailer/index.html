@@ -30,12 +30,13 @@
                 <td><a href="{{ log.campaign.get_absolute_url }}">{{ log.campaign.title }}</a></td>
                 <td><a href="{{ log.sector.get_absolute_url }}">{{ log.sector.name }}</a></td>
                 <td>{{ log.num_emails }}</td>
-                <td>
+                <td><a href="{% url 'bulkymonkey:progress' log.id %}">
                     {% if log.is_sent %}
                         <span class="glyphicon glyphicon-ok-sign"></span>
                     {% else %}
                         <span class="glyphicon glyphicon-minus-sign"></span>
                     {% endif %}
+                    </a>
                 </td>
                 <td>{{ log.created_on }}</td>
               </tr>
@@ -91,7 +92,7 @@
 {% endblock %}
 
 {% block aux_scripts %}
-<script type="text/javascript">
+<script>
     // Chart Draw Function
     function drawChart(chart, data) {
         var chart_selector = "#" + chart;

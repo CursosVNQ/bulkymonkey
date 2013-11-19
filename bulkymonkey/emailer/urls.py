@@ -27,5 +27,6 @@ urlpatterns = patterns(
 
     # Send emails
     url(r'^send-emails$', SendEmailsView.as_view(), name='send-emails'),
-
+    url(r'^progress/(?P<pk>\d+)/$', ShowProgressView.as_view(), name='progress'),
+    url(r'^get-progress/(?P<pk>\d+)/$', GetCurrentProgressView.as_view(), name='get-progress'),
 )

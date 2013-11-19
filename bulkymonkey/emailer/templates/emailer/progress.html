@@ -1,0 +1,69 @@
+{% extends "emailer/base.html" %}
+{% load i18n %}
+
+{% block extra_title %}{% trans "sending emails" %}{% endblock %}
+
+{% block content %}
+<h2>{% trans "Sending emails" %}</h2>
+<hr>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+      <tr>
+      	<th>{% trans "Campaign" %}</th>
+      	<td>{{ object.campaign.title }}</td>
+      </tr>
+      <tr>
+      	<th>{% trans "Sector" %}</th>
+      	<td>{{ object.sector.name }}</td>
+      </tr>
+      <tr>
+      	<th>{% trans "Emails sent" %}</th>
+      	<td>{{ object.num_emails }}</td>
+      </tr>
+    </table>
+</div>
+
+<div class="progress progress-striped">
+  <div class="progress-bar progress-bar-info active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+  </div>
+</div>
+{% endblock %}
+
+{% block aux_scripts %}
+<script>
+	$(document).ready(function(){
+		{% if object.is_sent %}
+			var $bar = $('.progress-bar');
+			$bar.attr('style', 'width: 100%');
+			$bar.text("{% trans 'Sending completed' %}");
+		{% else %}
+		    var progress = setInterval(function() {
+			    var $bar = $('.progress-bar');
+
+			    if ($bar.attr('aria-valuenow')>=100) {
+			    	// Process completed
+			        clearInterval(progress);
+			        $bar.removeClass('active');
+			        $bar.text("{% trans 'Sending completed' %}");
+			    } else {
+			    	// Still loading
+
+			    	// Get percentage of completion
+			    	$.get("{% url 'bulkymonkey:get-progress' object.id %}", function(data) {
+			    		if (!data.status_ok) {
+			    			new_percent = 100.00
+			    		} else {
+				    		new_percent = data.mails_sent * 100 / {{ object.num_emails }}
+				    		new_percent = new_percent.toFixed(2);
+			    		}
+				        $bar.attr('aria-valuenow', new_percent);
+				    	$bar.text(new_percent + "%");
+				    	$bar.attr('style', 'width: ' + new_percent + "%");
+			    	});
+			    }
+			}, 800);
+		{% endif %}
+	});
+</script>
+{% endblock %}

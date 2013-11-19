@@ -1,7 +1,11 @@
+import threading
+import json
 from django.core.urlresolvers import reverse, reverse_lazy
+from django.core.cache import cache
 from django.db import transaction
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
+from django.http import HttpResponse
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -170,7 +174,7 @@ class SectorsChartDataView(LoginRequiredMixin, StaffuserRequiredMixin, JSONRespo
 #### Load emails from file ####
 
 
-class LoadEmailsFromFileView(SectorChoicesInitialMixin, SuccessMessageMixin, FormView):
+class LoadEmailsFromFileView(LoginRequiredMixin, StaffuserRequiredMixin, SectorChoicesInitialMixin, SuccessMessageMixin, FormView):
     template_name = "emailer/load-emails.html"
     form_class = LoadEmailsFromFileForm
     success_message = _('{num_emails} emails were added to {sector}')
@@ -194,8 +198,52 @@ class LoadEmailsFromFileView(SectorChoicesInitialMixin, SuccessMessageMixin, For
 
 #### Send emails ####
 
+def send_mail_worker(campaign, sector, campaign_log):
 
-class SendEmailsView(SectorChoicesInitialMixin, SuccessMessageMixin, FormView):
+    # Build cache key to show progress
+    cache_key = 'progress-campaign:{}'.format(campaign_log.id)
+
+    # Build message
+    msg = EmailMultiAlternatives(
+        subject=campaign.title,
+        body='',
+        from_email="{from_name} <{from_email}>".format(from_name=campaign.from_name,
+                                                       from_email=campaign.from_email),
+    )
+    msg.attach_alternative(campaign.html_mail.read(), "text/html")
+
+    # Optional Mandrill-specific extensions:
+    msg.tags = campaign.get_tags()
+    msg.async = True
+    msg.track_opens = True
+    msg.track_clicks = True
+
+    # Send to Mandrill
+    for i, email in enumerate(sector.email_set.all()):
+        msg.to = [email.address]
+        msg.send()
+        cache.set(cache_key, i + 1, None)
+
+    # Change status
+    campaign_log.is_sent = True
+    campaign_log.save()
+    cache.delete(cache_key)
+
+
+class GetCurrentProgressView(LoginRequiredMixin, StaffuserRequiredMixin, JSONResponseMixin, AjaxResponseMixin, View):
+    def get_ajax(self, request, *args, **kwargs):
+        cache_key = 'progress-campaign:{}'.format(kwargs['pk'])
+        mails_sent = cache.get(cache_key)
+        response = {'mails_sent': mails_sent, 'status_ok': mails_sent is not None}
+        return self.render_json_response(response)
+
+
+class ShowProgressView(LoginRequiredMixin, StaffuserRequiredMixin, DetailView):
+    template_name = "emailer/progress.html"
+    model = SentCampaignLog
+
+
+class SendEmailsView(LoginRequiredMixin, StaffuserRequiredMixin, SectorChoicesInitialMixin, SuccessMessageMixin, FormView):
     template_name = "emailer/send-emails.html"
     form_class = SendEmailsForm
     success_message = _('{num_emails} emails from {sector} were queued in Mandrill')
@@ -212,32 +260,21 @@ class SendEmailsView(SectorChoicesInitialMixin, SuccessMessageMixin, FormView):
         campaign = form.cleaned_data['campaign']
 
         # Log action
-        campaign_log = SentCampaignLog.objects.create(campaign=campaign, sector=sector, num_emails=self.num_emails)
+        self.campaign_log = SentCampaignLog.objects.create(campaign=campaign, sector=sector, num_emails=self.num_emails)
 
-        # Build message
-        msg = EmailMultiAlternatives(
-            subject=campaign.title,
-            body='',
-            from_email="{from_name} <{from_email}>".format(from_name=campaign.from_name,
-                                                           from_email=campaign.from_email),
-        )
-        msg.attach_alternative(campaign.html_mail.read(), "text/html")
+        # Create a new thread in Daemon mode to send messages
+        t = threading.Thread(target=send_mail_worker,
+                             args=[campaign, sector, self.campaign_log])
+        t.setDaemon(True)
+        t.start()
 
-        # Optional Mandrill-specific extensions:
-        msg.tags = campaign.get_tags()
-        msg.async = True
-        msg.track_opens = True
-        msg.track_clicks = True
-
-        # Send to Mandrill
-        for email in sector.email_set.all():
-            msg.to = [email.address]
-            msg.send()
-
-        # Change status
-        campaign_log.is_sent = True
-        campaign_log.save()
-
+        if self.request.is_ajax():
+            success_message = self.get_success_message(form.cleaned_data)
+            if success_message:
+                messages.success(self.request, success_message)
+            response_data = {}
+            response_data['url'] = reverse('bulkymonkey:progress', args=(self.campaign_log.id,))
+            return HttpResponse(json.dumps(response_data), content_type="application/json")
         return super(SendEmailsView, self).form_valid(form)
 
     def get_success_message(self, cleaned_data):

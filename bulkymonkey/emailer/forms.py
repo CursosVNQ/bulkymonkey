@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Submit, Layout, Button, Field
 from crispy_forms.bootstrap import FormActions
-from django.utils.translation import ugettext_lazy as _
 
 import floppyforms as forms
 
@@ -113,12 +114,13 @@ class SendEmailsForm(forms.Form):
 
         # Crispy form
         self.helper = FormHelper()
+        self.helper.form_action = reverse('bulkymonkey:send-emails')
         self.helper.layout = Layout(
             Field('campaign'),
             Field('sector'),
             FormActions(
                 Button('cancel', _('Cancel'), onclick='history.go(-1);'),
-                Submit('submit', _('Create')),
+                Submit('submit', _('Send')),
             )
         )
 

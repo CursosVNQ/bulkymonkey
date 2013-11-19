@@ -29,13 +29,14 @@
   <link rel="apple-touch-icon-precomposed" href="{{ STATIC_URL }}img/apple-touch-icon-57-precomposed.png">
   <link rel="shortcut icon" href="{{ STATIC_URL }}img/favicon.png">
   
-	<script type="text/javascript" src="{{ STATIC_URL }}js/jquery.min.js"></script>
-	<script type="text/javascript" src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="{{ STATIC_URL }}js/scripts.js"></script>
+  <script src="{{ STATIC_URL }}js/jquery.min.js"></script>
+  <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
+  <script src="{{ STATIC_URL }}js/scripts.js"></script>
+  <script src="{{ STATIC_URL }}js/bootbox.min.js"></script>
 
   <!-- NVD3.js Charts -->
-  <script type="text/javascript" src="{{ STATIC_URL }}js/d3.v2.min.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}js/nv.d3.min.js"></script>
+  <script src="{{ STATIC_URL }}js/d3.v2.min.js"></script>
+  <script src="{{ STATIC_URL }}js/nv.d3.min.js"></script>
   <link href="{{ STATIC_URL }}css/nv.d3.min.css" rel="stylesheet">
 
   {% block extra_header %}{% endblock %}
@@ -126,7 +127,7 @@
 	</div>
 </div>
 {% endblock %}
+</body>
 {% block aux_scripts %}
 {% endblock %}
-</body>
 </html>
