@@ -14,13 +14,16 @@
 </h2>
 <hr>
 
-<ul>
-{% for item in email_list %}
-	<li>{{ item.address }}</li>
-{% empty %}
-	<li>{% trans "There are no emails" %}</li>
-{% endfor %}
-</ul>
+<div class="table-responsive">
+    <table class="table table-striped">
+    <tr><th>{% trans "Email" %}</th></tr>
+    {% for item in email_list %}
+		<tr><td>{{ item.address }}</td></tr>
+	{% empty %}
+		<tr><td>{% trans "There are no emails" %}</td></tr>
+	{% endfor %}
+    </table>
+</div>
 
 {% include "emailer/common/paginator.html" %}
 {% endblock %}
