@@ -12,15 +12,13 @@
 
 {% block aux_scripts %}
 <script>
-  	$.ajaxSetup({beforeSend: function(xhr, settings){
-	    xhr.setRequestHeader('X-CSRFToken', '{{ csrf_token }}');
-  	}});
 	$('#submit-id-submit').click(function(e) {
 	    e.preventDefault();
 	    bootbox.confirm("{% trans 'The campaign is about to be send. Are you sure?' %}", function(result) {
 	        if (result) {
 	        	var form = $('form');
 	            $.ajax({
+	            	headers: { 'X-CSRFToken': '{{ csrf_token }}' },
 	                url: form.attr('action'),
 	                method: 'POST',
 	                async: false,
