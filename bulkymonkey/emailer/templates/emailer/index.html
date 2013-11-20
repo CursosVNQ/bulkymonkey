@@ -32,9 +32,9 @@
                 <td>{{ log.num_emails }}</td>
                 <td><a href="{% url 'bulkymonkey:progress' log.id %}">
                     {% if log.is_sent %}
-                        <span class="glyphicon glyphicon-ok-sign"></span>
+                        <span class="label label-success">{% trans "Sent" %}</span>
                     {% else %}
-                        <span class="glyphicon glyphicon-minus-sign"></span>
+                        <span class="label label-danger">{% trans "Pending" %}</span>
                     {% endif %}
                     </a>
                 </td>

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-19 21:55+0000\n"
+"POT-Creation-Date: 2013-11-20 19:04+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -109,17 +109,17 @@ msgstr "Dirección de correo"
 
 #: emailer/models.py:52 emailer/models.py:88
 #: emailer/templates/emailer/index.html:22
-#: emailer/templates/emailer/progress.html:13
+#: emailer/templates/emailer/progress.html:17
 msgid "Campaign"
 msgstr "Campaña"
 
 #: emailer/models.py:53 emailer/models.py:61
 #: emailer/templates/emailer/index.html:23
-#: emailer/templates/emailer/progress.html:17
+#: emailer/templates/emailer/progress.html:21
 msgid "Sector"
 msgstr "Sector"
 
-#: emailer/models.py:54
+#: emailer/models.py:54 emailer/templates/emailer/index.html:35
 msgid "Sent"
 msgstr "Enviado"
 
@@ -168,7 +168,7 @@ msgstr "Sector eliminado satisfactoriamente"
 msgid "{num_emails} emails were added to {sector}"
 msgstr "{num_emails} emails fueron añadidos a {sector}"
 
-#: emailer/views.py:250
+#: emailer/views.py:249
 msgid "{num_emails} emails from {sector} were queued in Mandrill"
 msgstr "{num_emails} emails de {sector} se encolaron en Mandrill"
 
@@ -226,7 +226,7 @@ msgid "Latest actions"
 msgstr "Últimas acciones"
 
 #: emailer/templates/emailer/index.html:24
-#: emailer/templates/emailer/progress.html:21
+#: emailer/templates/emailer/progress.html:25
 msgid "Emails sent"
 msgstr "Emails enviados"
 
@@ -235,8 +235,13 @@ msgid "Status"
 msgstr "Estado"
 
 #: emailer/templates/emailer/index.html:26
+#: emailer/templates/emailer/progress.html:13
 msgid "Date of dispatch"
 msgstr "Fecha de envío"
+
+#: emailer/templates/emailer/index.html:37
+msgid "Pending"
+msgstr "Pendiente"
 
 #: emailer/templates/emailer/index.html:53
 #: emailer/templates/emailer/sector-create.html:8
@@ -293,8 +298,8 @@ msgstr "enviando emails"
 msgid "Sending emails"
 msgstr "Enviando Emails"
 
-#: emailer/templates/emailer/progress.html:39
-#: emailer/templates/emailer/progress.html:48
+#: emailer/templates/emailer/progress.html:34
+#: emailer/templates/emailer/progress.html:52
 msgid "Sending completed"
 msgstr "Envio completado"
 
@@ -314,7 +319,7 @@ msgstr "enviar emails"
 msgid "Send emails"
 msgstr "Enviar Emails"
 
-#: emailer/templates/emailer/send-emails.html:20
+#: emailer/templates/emailer/send-emails.html:17
 msgid "The campaign is about to be send. Are you sure?"
 msgstr "La campaña está a punto de ser enviada. ¿Deseas continuar?"
 
