@@ -25,45 +25,43 @@
 </div>
 
 <div class="progress progress-striped">
-  <div class="progress-bar progress-bar-info active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
-  </div>
+    {% if object.is_sent %}
+        <div class="progress-bar progress-bar-info active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+        {% trans 'Sending completed' %}
+        </div>
+    {% else %}
+        <div class="progress-bar progress-bar-info active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 20%">
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
 
 {% block aux_scripts %}
 <script>
 	$(document).ready(function(){
-		{% if object.is_sent %}
-			var $bar = $('.progress-bar');
-			$bar.attr('style', 'width: 100%');
-			$bar.text("{% trans 'Sending completed' %}");
-		{% else %}
-		    var progress = setInterval(function() {
-			    var $bar = $('.progress-bar');
-
-			    if ($bar.attr('aria-valuenow')>=100) {
-			    	// Process completed
-			        clearInterval(progress);
-			        $bar.removeClass('active');
-			        $bar.text("{% trans 'Sending completed' %}");
-			    } else {
-			    	// Still loading
-
-			    	// Get percentage of completion
-			    	$.get("{% url 'bulkymonkey:get-progress' object.id %}", function(data) {
-			    		if (!data.status_ok) {
-			    			new_percent = 100.00
-			    		} else {
-				    		new_percent = data.mails_sent * 100 / {{ object.num_emails }}
-				    		new_percent = new_percent.toFixed(2);
-			    		}
-				        $bar.attr('aria-valuenow', new_percent);
-				    	$bar.text(new_percent + "%");
-				    	$bar.attr('style', 'width: ' + new_percent + "%");
-			    	});
-			    }
-			}, 800);
-		{% endif %}
+	    var $bar = $('.progress-bar');
+	    var progress = setInterval(function() {
+    	    if ($bar.attr('aria-valuenow')>=100) {
+    	    	// Process completed
+    	        clearInterval(progress);
+    	        $bar.removeClass('active');
+    	        $bar.text("{% trans 'Sending completed' %}");
+    	    } else { 
+    	    	// Still loading
+        	    // Get percentage of completion
+            	$.get("{% url 'bulkymonkey:get-progress' object.id %}", function(data) {
+            		if (!data.status_ok) {
+            			new_percent = 100.00
+            		} else {
+        	    		new_percent = data.mails_sent * 100 / {{ object.num_emails }}
+        	    		new_percent = new_percent.toFixed(2);
+            		}
+        	        $bar.attr('aria-valuenow', new_percent);
+        	    	$bar.text(new_percent + "%");
+        	    	$bar.attr('style', 'width: ' + new_percent + "%");
+            	});
+    	    }
+	    }, 800);
 	});
 </script>
 {% endblock %}
