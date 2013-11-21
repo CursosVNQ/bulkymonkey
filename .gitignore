@@ -47,6 +47,9 @@ docs/_build
 # Media dir
 bulkymonkey/media/*
 
+# Static dir
+bulkymonkey/static/*
+
 # Envdir
 bulkymonkey/bulkymonkey_env/*
 *.*~

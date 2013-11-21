@@ -8,3 +8,4 @@ django-configurations==0.6
 dj-database-url==0.2.2
 python-memcached==1.53
 pytz
+uWSGI==1.9.20
