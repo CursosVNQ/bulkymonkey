@@ -21,6 +21,7 @@ Quickstart
     $ mkvirtualenv bulkymonkey
     $ pip install -r requirements.txt
     $ python bulkymonkey/manage.py syncdb
+    $ export DJANGO_MANDRILL_API_KEY=yourapikey
     $ python bulkymonkey/manage.py runserver
 
 
