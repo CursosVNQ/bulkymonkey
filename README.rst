@@ -13,6 +13,17 @@ A Django Project to send mass email via Mandrill
 Quickstart
 ----------
 
+Requirements
+++++++++++++++++
+
+.. code-block :: bash
+
+    $ sudo apt-get install memcached nginx build-essential
+
+
+Installation
+++++++++++++++++
+
 .. code-block :: bash
 
     $ cd yourfavdir
@@ -22,7 +33,6 @@ Quickstart
     $ pip install -r requirements.txt
     $ python bulkymonkey/manage.py syncdb
     $ export DJANGO_MANDRILL_API_KEY=yourapikey
-    $ python bulkymonkey/manage.py runserver
 
 
 Features
