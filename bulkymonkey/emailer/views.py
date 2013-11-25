@@ -239,7 +239,7 @@ def send_mail_worker(host, campaign, sector, campaign_log):
 
     # Build cache key to show progress
     cache_key = 'progress-campaign:{}'.format(campaign_log.id)
-
+    body = campaign.html_mail.read()
 
     # Send to Mandrill
     for i, email in enumerate(sector.email_set.all()):
@@ -257,7 +257,7 @@ def send_mail_worker(host, campaign, sector, campaign_log):
         msg.track_opens = True
         msg.track_clicks = True
         msg.to = [email.address]
-        msg.attach_alternative(attach_remove_link(host, campaign.html_mail.read(), email), "text/html")
+        msg.attach_alternative(attach_remove_link(host, body, email), "text/html")
         msg.send()
         cache.set(cache_key, i + 1, None)
 
