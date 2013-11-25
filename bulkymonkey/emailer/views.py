@@ -244,8 +244,8 @@ def send_mail_worker(request, campaign, sector, campaign_log):
     msg = EmailMultiAlternatives(
         subject=campaign.title,
         body='',
-        from_email="{from_name} <{from_email}>".format(from_name=campaign.from_name,
-                                                       from_email=campaign.from_email),
+        from_email=u"{from_name} <{from_email}>".format(from_name=campaign.from_name,
+                                                        from_email=campaign.from_email),
     )
 
     # Optional Mandrill-specific extensions:
