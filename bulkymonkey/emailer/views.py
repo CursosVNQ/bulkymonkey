@@ -222,7 +222,7 @@ class DeleteEmailsFromFileView(LoginRequiredMixin, StaffuserRequiredMixin, Succe
 
 #### Send emails ####
 
-def attach_remove_link(request, message, email):
+def attach_remove_link(host, message, email):
         """
         Adds a link at the end of the message that allows the user to stop receiving emails
         """
@@ -230,12 +230,12 @@ def attach_remove_link(request, message, email):
         signer = signing.Signer()
         signed_email = base64.b64encode(signer.sign(email.address))
         remove_link_text = _(u'Click here to stop receiving emails from us')
-        remove_link_url = request.build_absolute_uri(reverse('bulkymonkey:delete-signed-email', args=(signed_email,)))
+        remove_link_url = 'http://' + host + reverse('bulkymonkey:delete-signed-email', args=(signed_email,))
         message += u'<br><a href="{}">{}</a>'.format(remove_link_url, remove_link_text)
         return message
 
 
-def send_mail_worker(request, campaign, sector, campaign_log):
+def send_mail_worker(host, campaign, sector, campaign_log):
 
     # Build cache key to show progress
     cache_key = 'progress-campaign:{}'.format(campaign_log.id)
@@ -257,7 +257,7 @@ def send_mail_worker(request, campaign, sector, campaign_log):
     # Send to Mandrill
     for i, email in enumerate(sector.email_set.all()):
         msg.to = [email.address]
-        msg.attach_alternative(attach_remove_link(request, campaign.html_mail.read(), email), "text/html")
+        msg.attach_alternative(attach_remove_link(host, campaign.html_mail.read(), email), "text/html")
         msg.send()
         cache.set(cache_key, i + 1, None)
 
@@ -301,7 +301,7 @@ class SendEmailsView(LoginRequiredMixin, StaffuserRequiredMixin, SectorChoicesIn
 
         # Create a new thread in Daemon mode to send messages
         t = threading.Thread(target=send_mail_worker,
-                             args=[self.request, campaign, sector, self.campaign_log])
+                             args=[self.request.get_host(), campaign, sector, self.campaign_log])
         t.setDaemon(True)
         t.start()
 
