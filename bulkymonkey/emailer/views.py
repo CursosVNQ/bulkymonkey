@@ -240,22 +240,22 @@ def send_mail_worker(host, campaign, sector, campaign_log):
     # Build cache key to show progress
     cache_key = 'progress-campaign:{}'.format(campaign_log.id)
 
-    # Build message
-    msg = EmailMultiAlternatives(
-        subject=campaign.title,
-        body='',
-        from_email=u"{from_name} <{from_email}>".format(from_name=campaign.from_name,
-                                                        from_email=campaign.from_email),
-    )
-
-    # Optional Mandrill-specific extensions:
-    msg.tags = campaign.get_tags()
-    msg.async = True
-    msg.track_opens = True
-    msg.track_clicks = True
 
     # Send to Mandrill
     for i, email in enumerate(sector.email_set.all()):
+        # Build message
+        msg = EmailMultiAlternatives(
+            subject=campaign.title,
+            body='',
+            from_email=u"{from_name} <{from_email}>".format(from_name=campaign.from_name,
+                                                            from_email=campaign.from_email),
+        )
+
+        # Optional Mandrill-specific extensions:
+        msg.tags = campaign.get_tags()
+        msg.async = True
+        msg.track_opens = True
+        msg.track_clicks = True
         msg.to = [email.address]
         msg.attach_alternative(attach_remove_link(host, campaign.html_mail.read(), email), "text/html")
         msg.send()
