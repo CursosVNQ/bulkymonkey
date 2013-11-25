@@ -1,0 +1,13 @@
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE }}">
+<head>
+  <meta charset="utf-8">
+  <title>{% trans "Unregister" %}</title>
+</head>
+<body>
+	<h1>{% trans "Request complete" %}</h1>
+	<p>{{ email }} {% trans "has been removed from all our databases" %}</p>
+</body>
+</html>

@@ -27,6 +27,7 @@ urlpatterns = patterns(
 
     # Delete emails
     url(r'^delete-emails$', DeleteEmailsFromFileView.as_view(), name='delete-emails'),
+    url(r'^unregister/(?P<email>.+)/', DeleteSignedEmailView.as_view(), name='delete-signed-email'),
 
     # Send emails
     url(r'^send-emails$', SendEmailsView.as_view(), name='send-emails'),

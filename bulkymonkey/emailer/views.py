@@ -1,11 +1,13 @@
 import threading
 import json
+import base64
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.cache import cache
+from django.core import signing
 from django.db import transaction
 from django.contrib import messages
 from django.contrib.messages.views import SuccessMessageMixin
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -220,7 +222,20 @@ class DeleteEmailsFromFileView(LoginRequiredMixin, StaffuserRequiredMixin, Succe
 
 #### Send emails ####
 
-def send_mail_worker(campaign, sector, campaign_log):
+def attach_remove_link(request, message, email):
+        """
+        Adds a link at the end of the message that allows the user to stop receiving emails
+        """
+
+        signer = signing.Signer()
+        signed_email = base64.b64encode(signer.sign(email.address))
+        remove_link_text = _(u'Click here to stop receiving emails from us')
+        remove_link_url = request.build_absolute_uri(reverse('bulkymonkey:delete-signed-email', args=(signed_email,)))
+        message += u'<br><a href="{}">{}</a>'.format(remove_link_url, remove_link_text)
+        return message
+
+
+def send_mail_worker(request, campaign, sector, campaign_log):
 
     # Build cache key to show progress
     cache_key = 'progress-campaign:{}'.format(campaign_log.id)
@@ -232,7 +247,6 @@ def send_mail_worker(campaign, sector, campaign_log):
         from_email="{from_name} <{from_email}>".format(from_name=campaign.from_name,
                                                        from_email=campaign.from_email),
     )
-    msg.attach_alternative(campaign.html_mail.read(), "text/html")
 
     # Optional Mandrill-specific extensions:
     msg.tags = campaign.get_tags()
@@ -243,6 +257,7 @@ def send_mail_worker(campaign, sector, campaign_log):
     # Send to Mandrill
     for i, email in enumerate(sector.email_set.all()):
         msg.to = [email.address]
+        msg.attach_alternative(attach_remove_link(request, campaign.html_mail.read(), email), "text/html")
         msg.send()
         cache.set(cache_key, i + 1, None)
 
@@ -286,7 +301,7 @@ class SendEmailsView(LoginRequiredMixin, StaffuserRequiredMixin, SectorChoicesIn
 
         # Create a new thread in Daemon mode to send messages
         t = threading.Thread(target=send_mail_worker,
-                             args=[campaign, sector, self.campaign_log])
+                             args=[self.request, campaign, sector, self.campaign_log])
         t.setDaemon(True)
         t.start()
 
@@ -302,3 +317,25 @@ class SendEmailsView(LoginRequiredMixin, StaffuserRequiredMixin, SectorChoicesIn
     def get_success_message(self, cleaned_data):
         return self.success_message.format(sector=cleaned_data['sector'],
                                            num_emails=self.num_emails)
+
+
+# Delete signed emails from people who don't like spam
+
+class DeleteSignedEmailView(TemplateView):
+    model = Email
+    template_name = "emailer/delete-signed.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        signer = signing.Signer()
+        try:
+            self.email_address = signer.unsign(base64.b64decode(kwargs['email']))
+            Email.objects.get(address=self.email_address).delete()
+        except (UnicodeDecodeError, TypeError, signing.BadSignature, Email.DoesNotExist):
+            raise Http404
+
+        return super(DeleteSignedEmailView, self).dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        context = super(DeleteSignedEmailView, self).get_context_data(**kwargs)
+        context['email'] = self.email_address
+        return context

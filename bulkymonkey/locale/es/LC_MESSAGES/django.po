@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-25 16:54+0100\n"
+"POT-Creation-Date: 2013-11-25 18:24+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,8 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: emailer/forms.py:17 emailer/templates/emailer/delete.html:8
+#: emailer/forms.py:17 emailer/forms.py:118
+#: emailer/templates/emailer/delete.html:8
 msgid "Delete"
 msgstr "Borrar"
 
@@ -52,7 +53,6 @@ msgid "Cancel"
 msgstr "Cancelar"
 
 #: emailer/forms.py:42 emailer/forms.py:62 emailer/forms.py:86
-#: emailer/forms.py:118
 msgid "Create"
 msgstr "Añadir"
 
@@ -157,23 +157,27 @@ msgstr "De (email)"
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: emailer/views.py:101
+#: emailer/views.py:103
 msgid "Campaign deleted successfully"
 msgstr "Campaña eliminada satisfactoriamente"
 
-#: emailer/views.py:152
+#: emailer/views.py:154
 msgid "Sector deleted successfully"
 msgstr "Sector eliminado satisfactoriamente"
 
-#: emailer/views.py:180
+#: emailer/views.py:182
 msgid "{num_emails} emails were added to {sector}"
 msgstr "{num_emails} emails fueron añadidos a {sector}"
 
-#: emailer/views.py:204
+#: emailer/views.py:206
 msgid "{num_emails} emails were deleted"
 msgstr "Se borraron {num_emails} emails"
 
-#: emailer/views.py:271
+#: emailer/views.py:232
+msgid "Click here to stop receiving emails from us"
+msgstr "Haga clic aquí para no recibir más emails"
+
+#: emailer/views.py:286
 msgid "{num_emails} emails from {sector} were queued in Mandrill"
 msgstr "{num_emails} emails de {sector} se encolaron en Mandrill"
 
@@ -230,6 +234,18 @@ msgstr "No hay campañas"
 #: emailer/templates/emailer/delete-emails.html:5
 msgid "delete emails"
 msgstr "borrar emails"
+
+#: emailer/templates/emailer/delete-signed.html:7
+msgid "Unregister"
+msgstr "Darse de baja"
+
+#: emailer/templates/emailer/delete-signed.html:10
+msgid "Request complete"
+msgstr "Petición completada"
+
+#: emailer/templates/emailer/delete-signed.html:11
+msgid "has been removed from all our databases"
+msgstr "ha sido borrado de todas nuestras bases de datos"
 
 #: emailer/templates/emailer/delete.html:10
 msgid "This item will be removed. Are you sure?"
