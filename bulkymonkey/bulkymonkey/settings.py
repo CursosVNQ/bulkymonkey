@@ -48,6 +48,7 @@ class Common(Configuration):
         'djrill',
         'floppyforms',
         'crispy_forms',
+        'south',
     )
 
     # Local apps

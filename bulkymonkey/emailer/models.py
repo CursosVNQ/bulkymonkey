@@ -88,7 +88,7 @@ class Campaign(TimeAwareModel):
         verbose_name = _('Campaign')
         verbose_name_plural = _('Campaigns')
 
-    title = models.CharField(_('Title'), max_length=50)
+    title = models.CharField(_('Title'), max_length=255)
     html_mail = models.FileField(upload_to=get_filename_function('campaigns'))
     from_name = models.CharField(_('From (name)'), max_length=50)
     from_email = models.CharField(_('From (email)'), max_length=50)
