@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-20 19:04+0100\n"
+"POT-Creation-Date: 2013-11-25 16:54+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,11 +47,12 @@ msgstr ""
 "emails en Mandrill (Opcional)"
 
 #: emailer/forms.py:41 emailer/forms.py:61 emailer/forms.py:85
-#: emailer/forms.py:122
+#: emailer/forms.py:117 emailer/forms.py:146
 msgid "Cancel"
 msgstr "Cancelar"
 
 #: emailer/forms.py:42 emailer/forms.py:62 emailer/forms.py:86
+#: emailer/forms.py:118
 msgid "Create"
 msgstr "Añadir"
 
@@ -59,31 +60,31 @@ msgstr "Añadir"
 msgid "The emails contained in the file will be bound to this sector"
 msgstr "Los emails contenidos en este fichero serán vinculados a este sector"
 
-#: emailer/forms.py:77
+#: emailer/forms.py:77 emailer/forms.py:110
 msgid "Plain text file containing line separated emails"
 msgstr "Fichero en texto plano que contiene un email en cada línea"
 
-#: emailer/forms.py:93
+#: emailer/forms.py:93 emailer/forms.py:125
 msgid "Incorrect file type"
 msgstr "Tipo de fichero incorrecto"
 
-#: emailer/forms.py:101 emailer/forms.py:131
+#: emailer/forms.py:101 emailer/forms.py:155
 msgid "Sector does not exist"
 msgstr "El sector no existe"
 
-#: emailer/forms.py:111
+#: emailer/forms.py:135
 msgid "Select the campaign that will be sent"
 msgstr "Selecciona la campaña que será enviada"
 
-#: emailer/forms.py:113
+#: emailer/forms.py:137
 msgid "The campaign will be sent to the emails contained in this sector"
 msgstr "La campaña será enviada a los emails pertenecientes a este sector"
 
-#: emailer/forms.py:123
+#: emailer/forms.py:147
 msgid "Send"
 msgstr "Enviar"
 
-#: emailer/forms.py:139
+#: emailer/forms.py:163
 msgid "Campaign does not exist"
 msgstr "La campaña no existe"
 
@@ -95,7 +96,7 @@ msgstr "Creado en"
 msgid "Modified on"
 msgstr "Modificado en"
 
-#: emailer/models.py:36
+#: emailer/models.py:36 emailer/templates/emailer/sector-detail.html:19
 msgid "Email"
 msgstr "Correo electrónico"
 
@@ -168,7 +169,11 @@ msgstr "Sector eliminado satisfactoriamente"
 msgid "{num_emails} emails were added to {sector}"
 msgstr "{num_emails} emails fueron añadidos a {sector}"
 
-#: emailer/views.py:249
+#: emailer/views.py:204
+msgid "{num_emails} emails were deleted"
+msgstr "Se borraron {num_emails} emails"
+
+#: emailer/views.py:271
 msgid "{num_emails} emails from {sector} were queued in Mandrill"
 msgstr "{num_emails} emails de {sector} se encolaron en Mandrill"
 
@@ -191,14 +196,19 @@ msgid "Load emails from file"
 msgstr "Cargar emails desde fichero"
 
 #: emailer/templates/emailer/base.html:74
+#: emailer/templates/emailer/delete-emails.html:8
+msgid "Delete emails from file"
+msgstr "Borrar emails desde fichero"
+
+#: emailer/templates/emailer/base.html:77
 msgid "Go to Mandrill"
 msgstr "Ir a Mandrill"
 
-#: emailer/templates/emailer/base.html:77
+#: emailer/templates/emailer/base.html:80
 msgid "Django admin"
 msgstr "Administración Django"
 
-#: emailer/templates/emailer/base.html:89
+#: emailer/templates/emailer/base.html:92
 msgid "Logout"
 msgstr "Salir"
 
@@ -216,6 +226,10 @@ msgstr "Eliminar campaña"
 #: emailer/templates/emailer/index.html:88
 msgid "There are no campaigns"
 msgstr "No hay campañas"
+
+#: emailer/templates/emailer/delete-emails.html:5
+msgid "delete emails"
+msgstr "borrar emails"
 
 #: emailer/templates/emailer/delete.html:10
 msgid "This item will be removed. Are you sure?"
@@ -307,7 +321,7 @@ msgstr "Envio completado"
 msgid "Delete sector"
 msgstr "Eliminar sector"
 
-#: emailer/templates/emailer/sector-detail.html:21
+#: emailer/templates/emailer/sector-detail.html:23
 msgid "There are no emails"
 msgstr "No hay correos electrónicos"
 

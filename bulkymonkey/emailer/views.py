@@ -185,7 +185,7 @@ class LoadEmailsFromFileView(LoginRequiredMixin, StaffuserRequiredMixin, SectorC
         return super(LoadEmailsFromFileView, self).dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
-        self.emails_to_load = form.cleaned_data['data'].splitlines()
+        self.emails_to_load = [e.strip() for e in form.cleaned_data['data'].splitlines() if e.strip()]
         for address in self.emails_to_load:
             email = Email.objects.get_or_create(address=address)[0]
             email.sectors.add(form.cleaned_data['sector'])
@@ -194,6 +194,28 @@ class LoadEmailsFromFileView(LoginRequiredMixin, StaffuserRequiredMixin, SectorC
     def get_success_message(self, cleaned_data):
         return self.success_message.format(sector=cleaned_data['sector'],
                                            num_emails=len(self.emails_to_load))
+
+#### Delete emails from file ####
+
+
+class DeleteEmailsFromFileView(LoginRequiredMixin, StaffuserRequiredMixin, SuccessMessageMixin, FormView):
+    template_name = "emailer/delete-emails.html"
+    form_class = DeleteEmailsFromFileForm
+    success_message = _('{num_emails} emails were deleted')
+    success_url = reverse_lazy('bulkymonkey:index')
+
+    @method_decorator(transaction.atomic)
+    def dispatch(self, request, *args, **kwargs):
+        return super(DeleteEmailsFromFileView, self).dispatch(request, *args, **kwargs)
+
+    def form_valid(self, form):
+        self.emails_to_load = [e.strip() for e in form.cleaned_data['data'].splitlines() if e.strip()]
+        Email.objects.filter(address__in=self.emails_to_load).delete()
+
+        return super(DeleteEmailsFromFileView, self).form_valid(form)
+
+    def get_success_message(self, cleaned_data):
+        return self.success_message.format(num_emails=len(self.emails_to_load))
 
 
 #### Send emails ####

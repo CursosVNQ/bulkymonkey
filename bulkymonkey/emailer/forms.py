@@ -103,6 +103,30 @@ class LoadEmailsFromFileForm(forms.Form):
         return data
 
 
+class DeleteEmailsFromFileForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        super(DeleteEmailsFromFileForm, self).__init__(*args, **kwargs)
+        self.fields['data'] = forms.FileField(help_text=_('Plain text file containing line separated emails'))
+
+        # Crispy form
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            Field('data'),
+            FormActions(
+                Button('cancel', _('Cancel'), onclick='history.go(-1);'),
+                Submit('submit', _('Delete')),
+            )
+        )
+
+    def clean_data(self):
+        data = self.cleaned_data['data']
+        if data.content_type not in ('text/plain',):
+            raise forms.ValidationError(_("Incorrect file type"))
+
+        return data.read()
+
+
 class SendEmailsForm(forms.Form):
 
     def __init__(self, *args, **kwargs):

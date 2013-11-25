@@ -25,6 +25,9 @@ urlpatterns = patterns(
     # Load emails
     url(r'^load-emails$', LoadEmailsFromFileView.as_view(), name='load-emails'),
 
+    # Delete emails
+    url(r'^delete-emails$', DeleteEmailsFromFileView.as_view(), name='delete-emails'),
+
     # Send emails
     url(r'^send-emails$', SendEmailsView.as_view(), name='send-emails'),
     url(r'^progress/(?P<pk>\d+)/$', ShowProgressView.as_view(), name='progress'),
