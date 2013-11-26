@@ -49,6 +49,7 @@ class Common(Configuration):
         'floppyforms',
         'crispy_forms',
         'south',
+        'djcelery',
     )
 
     # Local apps
@@ -75,8 +76,7 @@ class Common(Configuration):
     # Database
     # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
     # http://django-configurations.readthedocs.org/en/latest/values/#configurations.values.DatabaseURLValue
-    DATABASES = values.DatabaseURLValue('sqlite:///%s' % os.path.join(BASE_DIR, 'db.sqlite3'),
-                                        environ=True)
+    DATABASES = values.DatabaseURLValue(environ=True, environ_name='DJANGO_DATABASE_URL')
 
     # Internationalization
     # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -130,6 +130,8 @@ class Common(Configuration):
             'LOCATION': '127.0.0.1:11211',
         }
     }
+
+    SOUTH_DATABASE_ADAPTERS = {'default': 'south.db.postgresql_psycopg2'}
 
 
 class Dev(Common):

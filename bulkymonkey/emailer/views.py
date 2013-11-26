@@ -1,4 +1,3 @@
-import threading
 import json
 import base64
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -12,10 +11,10 @@ from django.utils.decorators import method_decorator
 from django.utils.translation import ugettext_lazy as _
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.views.generic import TemplateView, View, DetailView, ListView, CreateView, DeleteView, FormView
-from django.core.mail import EmailMultiAlternatives
 from braces.views import AjaxResponseMixin, JSONResponseMixin, LoginRequiredMixin, StaffuserRequiredMixin
 from .models import *
 from .forms import *
+from .tasks import send_mail_worker
 
 
 class PaginateMixin(object):
@@ -222,50 +221,6 @@ class DeleteEmailsFromFileView(LoginRequiredMixin, StaffuserRequiredMixin, Succe
 
 #### Send emails ####
 
-def attach_remove_link(host, message, email):
-        """
-        Adds a link at the end of the message that allows the user to stop receiving emails
-        """
-
-        signer = signing.Signer()
-        signed_email = base64.b64encode(signer.sign(email.address))
-        remove_link_text = _(u'Click here to stop receiving emails from us')
-        remove_link_url = 'http://' + host + reverse('bulkymonkey:delete-signed-email', args=(signed_email,))
-        message += u'<br><a href="{}">{}</a>'.format(remove_link_url, remove_link_text)
-        return message
-
-
-def send_mail_worker(host, campaign, sector, campaign_log):
-
-    # Build cache key to show progress
-    cache_key = 'progress-campaign:{}'.format(campaign_log.id)
-    body = campaign.html_mail.read()
-
-    # Send to Mandrill
-    for i, email in enumerate(sector.email_set.all()):
-        # Build message
-        msg = EmailMultiAlternatives(
-            subject=campaign.title,
-            body='',
-            from_email=u"{from_name} <{from_email}>".format(from_name=campaign.from_name,
-                                                            from_email=campaign.from_email),
-        )
-
-        # Optional Mandrill-specific extensions:
-        msg.tags = campaign.get_tags()
-        msg.async = True
-        msg.track_opens = True
-        msg.track_clicks = True
-        msg.to = [email.address]
-        msg.attach_alternative(attach_remove_link(host, body, email), "text/html")
-        msg.send()
-        cache.set(cache_key, i + 1, None)
-
-    # Change status
-    campaign_log.is_sent = True
-    campaign_log.save()
-    cache.delete(cache_key)
-
 
 class GetCurrentProgressView(LoginRequiredMixin, StaffuserRequiredMixin, JSONResponseMixin, AjaxResponseMixin, View):
     def get_ajax(self, request, *args, **kwargs):
@@ -298,12 +253,7 @@ class SendEmailsView(LoginRequiredMixin, StaffuserRequiredMixin, SectorChoicesIn
 
         # Log action
         self.campaign_log = SentCampaignLog.objects.create(campaign=campaign, sector=sector, num_emails=self.num_emails)
-
-        # Create a new thread in Daemon mode to send messages
-        t = threading.Thread(target=send_mail_worker,
-                             args=[self.request.get_host(), campaign, sector, self.campaign_log])
-        t.setDaemon(True)
-        t.start()
+        send_mail_worker.apply_async((self.request.get_host(), campaign, sector, self.campaign_log))
 
         if self.request.is_ajax():
             success_message = self.get_success_message(form.cleaned_data)
