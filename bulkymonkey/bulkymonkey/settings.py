@@ -81,7 +81,7 @@ class Common(Configuration):
     # Internationalization
     # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
-    LANGUAGE_CODE = 'en-us'
+    LANGUAGE_CODE = 'es-es'
 
     TIME_ZONE = 'Europe/Madrid'
 
@@ -168,5 +168,6 @@ class Prod(Common):
     """
     DEBUG = False
     TEMPLATE_DEBUG = DEBUG
-
+    ALLOWED_HOSTS = ['*']
     SECRET_KEY = values.SecretValue()
+
