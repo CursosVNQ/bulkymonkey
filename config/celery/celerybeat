@@ -1,0 +1,13 @@
+# Where the Django project is.
+CELERYBEAT_CHDIR="/home/user/repos/bulkymonkey/bulkymonkey"
+
+ENV_PYTHON="envdir $CELERYBEAT_CHDIR/bulkymonkey_env /home/user/.virtualenvs/bulkymonkey/bin/python"
+
+# Name of the projects settings module.
+export DJANGO_SETTINGS_MODULE="bulkymonkey.settings"
+
+# Path to celerybeat
+CELERYBEAT="$ENV_PYTHON $CELERYBEAT_CHDIR/manage.py celerybeat"
+
+# Extra arguments to celerybeat
+CELERYBEAT_OPTS="--schedule=/var/run/celerybeat-schedule"

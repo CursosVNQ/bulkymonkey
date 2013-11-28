@@ -1,0 +1,37 @@
+# Name of nodes to start, here we have a single node
+CELERYD_NODES="w1"
+# or we could have three nodes:
+#CELERYD_NODES="w1 w2 w3"
+
+# Where to chdir at start.
+CELERYD_CHDIR="/home/user/repos/bulkymonkey/bulkymonkey"
+
+# Python interpreter from environment.
+ENV_PYTHON="envdir $CELERYD_CHDIR/bulkymonkey_env /home/user/.virtualenvs/bulkymonkey/bin/python"
+
+# How to call "manage.py celeryd_multi"
+CELERYD_MULTI="$ENV_PYTHON $CELERYD_CHDIR/manage.py celeryd_multi"
+
+# How to call "manage.py celeryctl"
+CELERYCTL="$ENV_PYTHON $CELERYD_CHDIR/manage.py celeryctl"
+
+# Extra arguments to celeryd
+CELERYD_OPTS="--time-limit=18000 --concurrency=2 -l info -A bulkymonkey"
+
+# Name of the celery config module.
+CELERY_CONFIG_MODULE="celeryconfig"
+
+# %n will be replaced with the nodename.
+CELERYD_LOG_FILE="/tmp/celery/%n.log"
+CELERYD_PID_FILE="/tmp/celery/%n.pid"
+
+# Workers should run as an unprivileged user.
+CELERYD_USER="user"
+CELERYD_GROUP="user"
+
+CELERYD_APP="bulkymonkey"
+
+# Name of the projects settings module.
+export DJANGO_CONFIGURATION="Prod"
+export DJANGO_SETTINGS_MODULE="bulkymonkey.settings"
+export DJANGO_SECRET_KEY="yoursecretkey"
