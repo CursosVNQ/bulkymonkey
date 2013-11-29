@@ -14,7 +14,7 @@ def attach_remove_link(host, message, email):
         """
 
         signer = signing.Signer()
-        signed_email = base64.b64encode(signer.sign(email.address))
+        signed_email = base64.b64encode(email.address)
         remove_link_text = _(u'Click here to stop receiving emails from us')
         remove_link_url = 'http://' + host + reverse('bulkymonkey:delete-signed-email', args=(signed_email,))
         message += '<br><a href="{}">{}</a>'.format(remove_link_url, remove_link_text.encode('utf-8'))

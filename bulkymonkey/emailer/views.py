@@ -276,9 +276,8 @@ class DeleteSignedEmailView(TemplateView):
     template_name = "emailer/delete-signed.html"
 
     def dispatch(self, request, *args, **kwargs):
-        signer = signing.Signer()
         try:
-            self.email_address = signer.unsign(base64.b64decode(kwargs['email']))
+            self.email_address = base64.b64decode(kwargs['email'])
             Email.objects.get(address=self.email_address).delete()
         except (UnicodeDecodeError, TypeError, signing.BadSignature, Email.DoesNotExist):
             raise Http404
