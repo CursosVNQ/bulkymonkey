@@ -14,7 +14,7 @@ from django.views.generic import TemplateView, View, DetailView, ListView, Creat
 from braces.views import AjaxResponseMixin, JSONResponseMixin, LoginRequiredMixin, StaffuserRequiredMixin
 from .models import *
 from .forms import *
-from .tasks import send_mail_worker
+from .tasks import send_mail_worker, send_mail_mandrill_worker
 
 
 class PaginateMixin(object):
@@ -253,7 +253,10 @@ class SendEmailsView(LoginRequiredMixin, StaffuserRequiredMixin, SectorChoicesIn
 
         # Log action
         self.campaign_log = SentCampaignLog.objects.create(campaign=campaign, sector=sector, num_emails=self.num_emails)
-        send_mail_worker.apply_async((self.request.get_host(), campaign, sector, self.campaign_log))
+        if getattr('settings', 'MANDRILL_API_KEY', None):
+            send_mail_mandrill_worker.apply_async((self.request.get_host(), campaign, sector, self.campaign_log))
+        else:
+            send_mail_worker.apply_async((self.request.get_host(), campaign, sector, self.campaign_log))
 
         if self.request.is_ajax():
             success_message = self.get_success_message(form.cleaned_data)

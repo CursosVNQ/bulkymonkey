@@ -105,8 +105,14 @@ class Common(Configuration):
     MEDIA_URL = '/media/'
 
     # Djrill configuration
-    MANDRILL_API_KEY = values.Value('', environ=True)
-    EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
+    # MANDRILL_API_KEY = values.Value('', environ=True)
+    # EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
+
+    # Local SMTP configuration
+    EMAIL_BACKEND = "emailer.backends.BulkyMonkeyEmailBackend"
+    EMAIL_HOST = values.Value('', environ=True)
+    EMAIL_HOST_USER = values.Value('', environ=True)
+    EMAIL_HOST_PASSWORD = values.Value('', environ=True)
 
     INTERNAL_IPS = ('127.0.0.1',)
 
