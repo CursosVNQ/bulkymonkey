@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-11-25 18:24+0100\n"
+"POT-Creation-Date: 2013-11-30 13:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -157,29 +157,29 @@ msgstr "De (email)"
 msgid "Tags"
 msgstr "Etiquetas"
 
-#: emailer/views.py:103
-msgid "Campaign deleted successfully"
-msgstr "Campaña eliminada satisfactoriamente"
-
-#: emailer/views.py:154
-msgid "Sector deleted successfully"
-msgstr "Sector eliminado satisfactoriamente"
-
-#: emailer/views.py:182
-msgid "{num_emails} emails were added to {sector}"
-msgstr "{num_emails} emails fueron añadidos a {sector}"
-
-#: emailer/views.py:206
-msgid "{num_emails} emails were deleted"
-msgstr "Se borraron {num_emails} emails"
-
-#: emailer/views.py:232
+#: emailer/tasks.py:16
 msgid "Click here to stop receiving emails from us"
 msgstr "Haga clic aquí para no recibir más emails"
 
-#: emailer/views.py:286
-msgid "{num_emails} emails from {sector} were queued in Mandrill"
-msgstr "{num_emails} emails de {sector} se encolaron en Mandrill"
+#: emailer/views.py:102
+msgid "Campaign deleted successfully"
+msgstr "Campaña eliminada satisfactoriamente"
+
+#: emailer/views.py:153
+msgid "Sector deleted successfully"
+msgstr "Sector eliminado satisfactoriamente"
+
+#: emailer/views.py:181
+msgid "{num_emails} emails were added to {sector}"
+msgstr "{num_emails} emails fueron añadidos a {sector}"
+
+#: emailer/views.py:205
+msgid "{num_emails} emails were deleted"
+msgstr "Se borraron {num_emails} emails"
+
+#: emailer/views.py:241
+msgid "{num_emails} emails from {sector} were queued"
+msgstr "Se encolaron {num_emails} emails de {sector}"
 
 #: emailer/templates/emailer/base.html:59
 msgid "Dashboard"

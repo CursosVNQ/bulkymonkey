@@ -30,8 +30,3 @@ CELERYD_USER="user"
 CELERYD_GROUP="user"
 
 CELERYD_APP="bulkymonkey"
-
-# Name of the projects settings module.
-export DJANGO_CONFIGURATION="Prod"
-export DJANGO_SETTINGS_MODULE="bulkymonkey.settings"
-export DJANGO_SECRET_KEY="yoursecretkey"

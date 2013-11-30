@@ -238,7 +238,7 @@ class ShowProgressView(LoginRequiredMixin, StaffuserRequiredMixin, DetailView):
 class SendEmailsView(LoginRequiredMixin, StaffuserRequiredMixin, SectorChoicesInitialMixin, SuccessMessageMixin, FormView):
     template_name = "emailer/send-emails.html"
     form_class = SendEmailsForm
-    success_message = _('{num_emails} emails from {sector} were queued in Mandrill')
+    success_message = _('{num_emails} emails from {sector} were queued')
     success_url = reverse_lazy('bulkymonkey:index')
 
     def get_initial(self):

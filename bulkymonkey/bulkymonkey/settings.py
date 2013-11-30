@@ -110,9 +110,9 @@ class Common(Configuration):
 
     # Local SMTP configuration
     EMAIL_BACKEND = "emailer.backends.BulkyMonkeyEmailBackend"
-    EMAIL_HOST = values.Value('', environ=True)
-    EMAIL_HOST_USER = values.Value('', environ=True)
-    EMAIL_HOST_PASSWORD = values.Value('', environ=True)
+    EMAIL_HOST = values.Value()
+    EMAIL_HOST_USER = values.Value()
+    EMAIL_HOST_PASSWORD = values.SecretValue()
 
     INTERNAL_IPS = ('127.0.0.1',)
 
@@ -176,4 +176,3 @@ class Prod(Common):
     TEMPLATE_DEBUG = DEBUG
     ALLOWED_HOSTS = ['*']
     SECRET_KEY = values.SecretValue()
-
