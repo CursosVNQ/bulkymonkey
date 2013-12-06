@@ -1,5 +1,6 @@
 import json
 import base64
+from django.conf import settings
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.core.cache import cache
 from django.core import signing
@@ -253,7 +254,7 @@ class SendEmailsView(LoginRequiredMixin, StaffuserRequiredMixin, SectorChoicesIn
 
         # Log action
         self.campaign_log = SentCampaignLog.objects.create(campaign=campaign, sector=sector, num_emails=self.num_emails)
-        if getattr('settings', 'MANDRILL_API_KEY', None):
+        if settings.EMAIL_METHOD == 'mandrill':
             send_mail_mandrill_worker.apply_async((self.request.get_host(), campaign, sector, self.campaign_log))
         else:
             send_mail_worker.apply_async((self.request.get_host(), campaign, sector, self.campaign_log))

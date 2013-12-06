@@ -104,7 +104,8 @@ class Common(Configuration):
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
     MEDIA_URL = '/media/'
 
-    if os.environ.setdefault('DJANGO_EMAIL_METHOD', 'smtp') == 'mandrill':
+    EMAIL_METHOD = os.environ.setdefault('DJANGO_EMAIL_METHOD', 'smtp')
+    if EMAIL_METHOD == 'mandrill':
         EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
     else:
         EMAIL_BACKEND = "emailer.backends.BulkyMonkeyEmailBackend"
