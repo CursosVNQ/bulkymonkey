@@ -104,12 +104,15 @@ class Common(Configuration):
     MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
     MEDIA_URL = '/media/'
 
+    if os.environ.setdefault('DJANGO_EMAIL_METHOD', 'smtp') == 'mandrill':
+        EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
+    else:
+        EMAIL_BACKEND = "emailer.backends.BulkyMonkeyEmailBackend"
+
     # Djrill configuration
-    # MANDRILL_API_KEY = values.Value('', environ=True)
-    # EMAIL_BACKEND = "djrill.mail.backends.djrill.DjrillBackend"
+    MANDRILL_API_KEY = values.Value('', environ=True)
 
     # Local SMTP configuration
-    EMAIL_BACKEND = "emailer.backends.BulkyMonkeyEmailBackend"
     EMAIL_HOST = values.Value()
     EMAIL_HOST_USER = values.Value()
     EMAIL_HOST_PASSWORD = values.SecretValue()
