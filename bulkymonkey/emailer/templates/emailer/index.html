@@ -55,19 +55,16 @@
     </span>
 </h2>
 <hr>
-<div class="row">
-    <div class="col-md-6">
+<div class="row col-md-12">
+    <div class="sectors">
         {% for sector in sectors %}
           <div>
               <a href="{{ sector.get_absolute_url }}">{{ sector.name }} ({{ sector.num_emails }})</a>
           </div>
         {% endfor %}
-        <div>
-            <h5>{% trans "Total" %} ({{ total_emails }} {% trans "emails" %})</h5>
-        </div>
     </div>
-    <div class="col-md-6">
-        <svg id="chart-sectors" style="height:300;width:100%"></svg>
+    <div>
+        <h5>{% trans "Total" %} ({{ total_emails }} {% trans "emails" %})</h5>
     </div>
 </div>
 <h2>
@@ -89,37 +86,4 @@
     {% endfor %}
     </table>
 </div>
-{% endblock %}
-
-{% block aux_scripts %}
-<script>
-    // Chart Draw Function
-    function drawChart(chart, data) {
-        var chart_selector = "#" + chart;
-        var width = 400,
-            height = 300;
-        nv.addGraph(function() {
-            var chart = nv.models.pieChart()
-                .x(function(d) { return d.label })
-                .y(function(d) { return d.value })
-                .color(d3.scale.category10().range())
-                .width(width)
-                .height(height)
-                .showLabels(true);
-            
-            d3.select(chart_selector)
-                .datum(data)
-                .transition().duration(1200)
-                .attr('width', width)
-                .attr('height', height)
-                .call(chart);
-            return chart;
-        });
-    };
-
-    // Load sector chart
-    $.get( "{% url 'bulkymonkey:sectors-chart-ajax' %}", function( data ) {
-        drawChart("chart-sectors", data);
-    });
-</script>
 {% endblock %}

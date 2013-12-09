@@ -1,3 +1,9 @@
 .footer {
 	background-color: #eee;
 }
+
+.sectors {
+	-moz-column-count:4; /* Firefox */
+	-webkit-column-count:4; /* Safari and Chrome */
+	column-count:4;
+}
